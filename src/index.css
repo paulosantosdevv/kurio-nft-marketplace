@@ -3,40 +3,41 @@
 @layer base {
   :root {
     --bg-primary: #140d0a;
-    --bg-surface: #1b120e;
+    --bg-surface: #1a110d;
     --bg-surface-elevated: #241914;
-    --bg-surface-hover: #2e201a;
-    --border-subtle: #2d1e17;
-    --border-medium: #3d2b21;
+    --border-subtle: #2d1c15;
+    --border-medium: #3d281e;
     --accent-amber: #d28a4c;
-    --accent-amber-hover: #e0985a;
-    --accent-cream: #f7f4ed;
-    --text-primary: #f7f4ed;
-    --text-secondary: #a69a8f;
-    --text-muted: #786b62;
-    --color-eth: #627eea;
-    --color-poly: #8247e5;
-    --color-sol: #14f195;
-    --color-danger: #ef4444;
-    --color-success: #22c55e;
+    --accent-amber-hover: #b87438;
+    --text-primary: #f5efe6;
+    --text-secondary: #8a7b70;
+    --text-muted: #5e5148;
   }
 
   body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
   }
 
-  /* Accessible focus indicators */
+  h1, h2, h3, .font-heading {
+    font-family: 'Chakra Petch', sans-serif;
+  }
+
   *:focus-visible {
     outline: 2px solid var(--accent-amber);
     outline-offset: 2px;
   }
 }
 
-/* Skeleton shimmer effect */
+/* Range input styling */
+input[type="range"] {
+  accent-color: #d28a4c;
+}
+
+/* Skeleton shimmer */
 @keyframes shimmer {
   0% {
     background-position: -200% 0;
@@ -49,9 +50,9 @@
 .shimmer {
   background: linear-gradient(
     90deg,
-    rgba(45, 30, 23, 0.4) 0%,
-    rgba(65, 45, 35, 0.8) 50%,
-    rgba(45, 30, 23, 0.4) 100%
+    rgba(45, 28, 21, 0.4) 0%,
+    rgba(65, 40, 30, 0.8) 50%,
+    rgba(45, 28, 21, 0.4) 100%
   );
   background-size: 200% 100%;
   animation: shimmer 1.8s infinite ease-in-out;
@@ -60,6 +61,6 @@
 @media (prefers-reduced-motion: reduce) {
   .shimmer {
     animation: none;
-    background: rgba(45, 30, 23, 0.6);
+    background: rgba(45, 28, 21, 0.6);
   }
 }

@@ -30,6 +30,7 @@ export interface NFTItem {
   }
   description: string
   price: string // ETH decimal string, e.g. "1.19"
+  originalPrice?: string
   category: NFTCategory
   network: BlockchainNetwork
   edition: string // e.g. "01/10", "1/50", "ABERTA"

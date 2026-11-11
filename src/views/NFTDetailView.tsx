@@ -183,7 +183,7 @@ export const NFTDetailView: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         {/* Left Column: Artwork & Metadata */}
         <div className="lg:col-span-6 space-y-8">
-          <div className="relative aspect-square rounded-3xl overflow-hidden bg-[#140d0a] border border-[#2d1e17] shadow-2xl">
+          <div className="relative aspect-square rounded-3xl overflow-hidden bg-[#ded7cb] border border-[#2d1e17] shadow-2xl">
             <img
               src={nft.imageUrl}
               alt={nft.title}

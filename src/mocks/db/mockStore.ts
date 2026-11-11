@@ -4,7 +4,7 @@ import { UserProfile } from '../../types/auth'
 import { Order } from '../../types/order'
 import { Wallet } from '../../types/wallet'
 
-const STORAGE_KEY = 'kurio_mock_db_v1'
+const STORAGE_KEY = 'kurio_mock_db_v2'
 
 export interface MockDatabase {
   users: Array<UserProfile & { passwordHash: string }>
@@ -32,7 +32,7 @@ const DEFAULT_USERS: Array<UserProfile & { passwordHash: string }> = [
     ensName: 'novasato.eth',
     bio: 'Colecionador de arte generativa e entusiasta do protocolo Ethereum.',
     createdAt: '2024-01-15T10:00:00Z',
-    passwordHash: 'password123', // simulated hash
+    passwordHash: 'password123',
   },
   {
     id: 'usr_collector_2',
@@ -53,7 +53,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     id: 'nft-1',
     tokenId: '#9042',
     title: 'Emerald Ape #842',
-    collection: 'Kurio Apes',
+    collection: 'Kurio Editions',
     creator: {
       name: 'Nova Sato',
       avatar: '/assets/avatars/default-avatar.png',
@@ -61,15 +61,14 @@ const DEFAULT_NFTS: NFTItem[] = [
       royaltyPercentage: 5,
     },
     description:
-      'Emerald Ape #842 é uma obra digital finalizada à mão da coleção Kurio Editions. Cada atributo fica armazenado nos metadados do token e verificado na Ethereum. A obra explora identidade, movimento e luz em um mundo digital sem fronteiras. A propriedade inclui arte em alta resolução, lançamentos exclusivos e registro permanente de procedência.',
+      'Emerald Ape #842 é uma obra digital finalizada à mão da coleção Kurio Editions. Cada atributo fica armazenado nos metadados do token e verificado na Ethereum. A obra explora identidade, movimento e luz em um mundo digital sem fronteiras.',
     price: '1.19',
     category: 'arte-digital',
     network: 'ethereum',
     edition: '1/50',
     totalEditions: 50,
     availableEditions: 19,
-    imageUrl: '/assets/nfts/emerald-ape.png',
-    badge: 'RARO',
+    imageUrl: '/assets/nfts/card_1_emerald_ape.png',
     contractAddress: '0x7A4289B842F81203A293E918239019E8',
     standard: 'ERC-721',
     ipfsHash: 'ipfs://QmZ8F91B...42EmeraldApe',
@@ -82,6 +81,67 @@ const DEFAULT_NFTS: NFTItem[] = [
   },
   {
     id: 'nft-2',
+    tokenId: '#0589',
+    title: 'Sage Nomad #589',
+    collection: 'Kurio Editions',
+    creator: {
+      name: 'Kaelen Thorne',
+      avatar: '/assets/avatars/default-avatar.png',
+      verified: true,
+      royaltyPercentage: 7.5,
+    },
+    description:
+      'A variante eremita da série Nomad, envolta em tecidos inteligentes e camuflagem biocromática.',
+    price: '1.69',
+    category: 'arte-digital',
+    network: 'ethereum',
+    edition: '1/30',
+    totalEditions: 30,
+    availableEditions: 7,
+    imageUrl: '/assets/nfts/card_2_sage_nomad.png',
+    contractAddress: '0x589A8192837190283A918239019E80589',
+    standard: 'ERC-721',
+    ipfsHash: 'ipfs://QmS589...Nomad',
+    isFavorite: false,
+    favoritesCount: 174,
+    rating: 4.9,
+    reviewsCount: 22,
+    createdAt: '2024-05-11T16:45:00Z',
+    version: 1,
+  },
+  {
+    id: 'nft-3',
+    tokenId: '#0552',
+    title: 'Neon Vessel #552',
+    collection: 'Kurio Editions',
+    creator: {
+      name: 'Vector Studio',
+      avatar: '/assets/avatars/default-avatar.png',
+      verified: true,
+      royaltyPercentage: 5,
+    },
+    description:
+      'Estrutura naval futurista equipada com reatores de plasma neon e malha geométrica de baixa densidade.',
+    price: '1.99',
+    originalPrice: '2.29',
+    category: 'jogos',
+    network: 'ethereum',
+    edition: '1/20',
+    totalEditions: 20,
+    availableEditions: 5,
+    imageUrl: '/assets/nfts/card_3_neon_vessel.png',
+    contractAddress: '0x552F8192837190283A918239019E80552',
+    standard: 'ERC-721',
+    ipfsHash: 'ipfs://QmV552...Vessel',
+    isFavorite: false,
+    favoritesCount: 205,
+    rating: 4.8,
+    reviewsCount: 31,
+    createdAt: '2024-05-12T20:30:00Z',
+    version: 1,
+  },
+  {
+    id: 'nft-4',
     tokenId: '#0118',
     title: 'Cosmic Bloom #118',
     collection: 'Kurio Editions',
@@ -99,8 +159,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     edition: '01/10',
     totalEditions: 10,
     availableEditions: 4,
-    imageUrl: '/assets/nfts/cosmic-bloom.png',
-    badge: 'ED. LIMITADA',
+    imageUrl: '/assets/nfts/card_4_cosmic_bloom.png',
     contractAddress: '0x3D1182A1B8C92130F92837190283A118',
     standard: 'ERC-721',
     ipfsHash: 'ipfs://QmC118...Bloom',
@@ -108,11 +167,11 @@ const DEFAULT_NFTS: NFTItem[] = [
     favoritesCount: 89,
     rating: 4.8,
     reviewsCount: 12,
-    createdAt: '2024-06-01T09:00:00Z',
+    createdAt: '2024-05-13T09:00:00Z',
     version: 1,
   },
   {
-    id: 'nft-3',
+    id: 'nft-5',
     tokenId: '#0314',
     title: 'Violet Nomad #314',
     collection: 'Kurio Editions',
@@ -130,8 +189,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     edition: '1/25',
     totalEditions: 25,
     availableEditions: 8,
-    imageUrl: '/assets/nfts/violet-nomad.png',
-    badge: 'POPULAR',
+    imageUrl: '/assets/nfts/card_5_violet_nomad.png',
     contractAddress: '0x8B3141F90238C198273901A832B10314',
     standard: 'ERC-721',
     ipfsHash: 'ipfs://QmV314...Nomad',
@@ -139,11 +197,11 @@ const DEFAULT_NFTS: NFTItem[] = [
     favoritesCount: 230,
     rating: 5.0,
     reviewsCount: 34,
-    createdAt: '2024-06-15T15:20:00Z',
+    createdAt: '2024-05-14T15:20:00Z',
     version: 1,
   },
   {
-    id: 'nft-4',
+    id: 'nft-6',
     tokenId: '#0888',
     title: 'Ivory Baron #888',
     collection: 'Kurio Editions',
@@ -161,8 +219,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     edition: '1/15',
     totalEditions: 15,
     availableEditions: 2,
-    imageUrl: '/assets/nfts/ivory-baron.png',
-    badge: 'RARO',
+    imageUrl: '/assets/nfts/card_6_ivory_baron.png',
     contractAddress: '0x9E888127391BCA829371029381A00888',
     standard: 'ERC-721',
     ipfsHash: 'ipfs://QmI888...Baron',
@@ -170,11 +227,11 @@ const DEFAULT_NFTS: NFTItem[] = [
     favoritesCount: 312,
     rating: 4.9,
     reviewsCount: 45,
-    createdAt: '2024-06-20T18:00:00Z',
+    createdAt: '2024-05-15T18:00:00Z',
     version: 1,
   },
   {
-    id: 'nft-5',
+    id: 'nft-7',
     tokenId: '#0287',
     title: 'Golden Beat #287',
     collection: 'Kurio Editions',
@@ -192,8 +249,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     edition: 'ABERTA',
     totalEditions: 100,
     availableEditions: 63,
-    imageUrl: '/assets/nfts/golden-beat.png',
-    badge: 'POPULAR',
+    imageUrl: '/assets/nfts/card_7_golden_beat_1.png',
     contractAddress: '0x287B9C18273910A92837190283A10287',
     standard: 'ERC-1155',
     ipfsHash: 'ipfs://QmG287...Beat',
@@ -201,11 +257,41 @@ const DEFAULT_NFTS: NFTItem[] = [
     favoritesCount: 95,
     rating: 4.7,
     reviewsCount: 16,
-    createdAt: '2024-07-01T11:00:00Z',
+    createdAt: '2024-05-16T11:00:00Z',
     version: 1,
   },
   {
-    id: 'nft-6',
+    id: 'nft-8',
+    tokenId: '#0288',
+    title: 'Golden Beat #287',
+    collection: 'Kurio Editions',
+    creator: {
+      name: 'Synthetix Sound',
+      avatar: '/assets/avatars/default-avatar.png',
+      verified: true,
+      royaltyPercentage: 10,
+    },
+    description:
+      'Segunda tiragem de áudio imersivo áureo gerado proceduralmente com sintetizadores modulares.',
+    price: '0.99',
+    category: 'musica',
+    network: 'polygon',
+    edition: 'ABERTA',
+    totalEditions: 100,
+    availableEditions: 51,
+    imageUrl: '/assets/nfts/card_8_golden_beat_2.png',
+    contractAddress: '0x288B9C18273910A92837190283A10288',
+    standard: 'ERC-1155',
+    ipfsHash: 'ipfs://QmG288...Beat',
+    isFavorite: false,
+    favoritesCount: 88,
+    rating: 4.7,
+    reviewsCount: 11,
+    createdAt: '2024-05-17T13:00:00Z',
+    version: 1,
+  },
+  {
+    id: 'nft-9',
     tokenId: '#0160',
     title: 'Golden Signal #160',
     collection: 'Kurio Editions',
@@ -219,11 +305,11 @@ const DEFAULT_NFTS: NFTItem[] = [
       'Transmissão de rádio convertida em espectrograma e renderizada como escultura de luz dourada.',
     price: '0.39',
     category: 'fotografia',
-    network: 'polygon',
+    network: 'solana',
     edition: '1/100',
     totalEditions: 100,
     availableEditions: 42,
-    imageUrl: '/assets/nfts/golden-signal.png',
+    imageUrl: '/assets/nfts/card_9_golden_signal.png',
     contractAddress: '0x160C819283719283A918239019E80160',
     standard: 'ERC-721',
     ipfsHash: 'ipfs://QmS160...Signal',
@@ -231,99 +317,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     favoritesCount: 68,
     rating: 4.6,
     reviewsCount: 9,
-    createdAt: '2024-07-05T14:10:00Z',
-    version: 1,
-  },
-  {
-    id: 'nft-7',
-    tokenId: '#0589',
-    title: 'Sage Nomad #589',
-    collection: 'Kurio Editions',
-    creator: {
-      name: 'Kaelen Thorne',
-      avatar: '/assets/avatars/default-avatar.png',
-      verified: true,
-      royaltyPercentage: 7.5,
-    },
-    description:
-      'A variante eremita da série Nomad, envolta em tecidos inteligentes e camuflagem biocromática.',
-    price: '1.69',
-    category: 'arte-3d',
-    network: 'ethereum',
-    edition: '1/30',
-    totalEditions: 30,
-    availableEditions: 7,
-    imageUrl: '/assets/nfts/sage-nomad.png',
-    badge: 'RARO',
-    contractAddress: '0x589A8192837190283A918239019E80589',
-    standard: 'ERC-721',
-    ipfsHash: 'ipfs://QmS589...Nomad',
-    isFavorite: false,
-    favoritesCount: 174,
-    rating: 4.9,
-    reviewsCount: 22,
-    createdAt: '2024-07-10T16:45:00Z',
-    version: 1,
-  },
-  {
-    id: 'nft-8',
-    tokenId: '#0552',
-    title: 'Neon Vessel #552',
-    collection: 'Kurio Editions',
-    creator: {
-      name: 'Vector Studio',
-      avatar: '/assets/avatars/default-avatar.png',
-      verified: true,
-      royaltyPercentage: 5,
-    },
-    description:
-      'Estrutura naval futurista equipada com reatores de plasma neon e malha geométrica de baixa densidade.',
-    price: '1.99',
-    category: 'jogos',
-    network: 'solana',
-    edition: '1/20',
-    totalEditions: 20,
-    availableEditions: 5,
-    imageUrl: '/assets/nfts/neon-vessel.png',
-    badge: 'POPULAR',
-    contractAddress: '0x552F8192837190283A918239019E80552',
-    standard: 'ERC-721',
-    ipfsHash: 'ipfs://QmV552...Vessel',
-    isFavorite: false,
-    favoritesCount: 205,
-    rating: 4.8,
-    reviewsCount: 31,
-    createdAt: '2024-07-15T20:30:00Z',
-    version: 1,
-  },
-  {
-    id: 'nft-9',
-    tokenId: '#0071',
-    title: 'Golden Frequency #071',
-    collection: 'Kurio Editions',
-    creator: {
-      name: 'Synthetix Sound',
-      avatar: '/assets/avatars/default-avatar.png',
-      verified: true,
-      royaltyPercentage: 10,
-    },
-    description:
-      'Harmônicos de sintetizador analógico congelados em vórtice de partículas com reflectância física.',
-    price: '0.59',
-    category: 'musica',
-    network: 'solana',
-    edition: '1/80',
-    totalEditions: 80,
-    availableEditions: 29,
-    imageUrl: '/assets/nfts/golden-frequency.png',
-    contractAddress: '0x071D8192837190283A918239019E80071',
-    standard: 'ERC-1155',
-    ipfsHash: 'ipfs://QmF071...Frequency',
-    isFavorite: false,
-    favoritesCount: 88,
-    rating: 4.7,
-    reviewsCount: 14,
-    createdAt: '2024-07-20T12:00:00Z',
+    createdAt: '2024-05-18T14:10:00Z',
     version: 1,
   },
 ]
@@ -430,7 +424,6 @@ class MockStore {
     return this.db
   }
 
-  // --- Users ---
   public findUserByEmail(email: string) {
     return this.db.users.find((u) => u.email.toLowerCase() === email.toLowerCase())
   }
@@ -458,7 +451,6 @@ class MockStore {
     return null
   }
 
-  // --- NFTs ---
   public getNFTs() {
     return this.db.nfts
   }
@@ -481,7 +473,6 @@ class MockStore {
     return null
   }
 
-  // --- Favorites ---
   public getFavorites(userId: string): string[] {
     return this.db.favorites[userId] || []
   }
@@ -507,7 +498,6 @@ class MockStore {
     return isFav
   }
 
-  // --- Cart ---
   public getCart(userIdOrGuest: string): CartItem[] {
     return this.db.carts[userIdOrGuest] || []
   }
@@ -535,7 +525,6 @@ class MockStore {
     this.persist()
   }
 
-  // --- Wallets ---
   public getWallets(userId: string): Wallet[] {
     return this.db.wallets[userId] || []
   }
@@ -570,7 +559,6 @@ class MockStore {
     this.persist()
   }
 
-  // --- Orders ---
   public getOrder(id: string) {
     return this.db.orders.find((o) => o.id === id)
   }
@@ -590,7 +578,6 @@ class MockStore {
     return order
   }
 
-  // --- Coupons ---
   public getCoupon(code: string) {
     return this.db.coupons.find((c) => c.code.toUpperCase() === code.toUpperCase())
   }

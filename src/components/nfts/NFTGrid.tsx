@@ -1,10 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { NFTItem } from '../../types/nft'
 import { NFTCard } from './NFTCard'
 import { Skeleton } from '../ui/Skeleton'
-import { Button } from '../ui/Button'
 import { useNavigate } from '@tanstack/react-router'
-import { AlertCircle, ChevronLeft, ChevronRight } from 'lucide-react'
+import { AlertCircle, ChevronRight } from 'lucide-react'
 
 export interface NFTGridProps {
   nfts: NFTItem[]
@@ -15,6 +14,7 @@ export interface NFTGridProps {
   total: number
   page: number
   totalPages: number
+  sortBy?: string
 }
 
 export const NFTGrid: React.FC<NFTGridProps> = ({
@@ -24,9 +24,10 @@ export const NFTGrid: React.FC<NFTGridProps> = ({
   error,
   refetch,
   page,
-  totalPages,
+  sortBy = 'recent',
 }) => {
   const navigate = useNavigate()
+  const [activeTab, setActiveTab] = useState<'all' | 'new' | 'trending'>('all')
 
   const handlePageChange = (newPage: number) => {
     navigate({
@@ -36,108 +37,152 @@ export const NFTGrid: React.FC<NFTGridProps> = ({
         page: newPage,
       }),
     })
-    window.scrollTo({ top: 400, behavior: 'smooth' })
+    window.scrollTo({ top: 500, behavior: 'smooth' })
   }
 
-  // Loading State with Shimmer Skeletons
-  if (isLoading) {
-    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Array.from({ length: 6 }).map((_, idx) => (
-          <div
-            key={idx}
-            className="bg-[#1b120e] border border-[#2d1e17] rounded-2xl overflow-hidden flex flex-col"
-          >
-            {/* Shimmer Image */}
-            <Skeleton className="w-full aspect-square" />
-            {/* Shimmer Info */}
-            <div className="p-4 space-y-3">
-              <Skeleton className="h-4 w-3/4" />
-              <Skeleton className="h-5 w-1/2" />
-              <div className="pt-3 border-t border-[#2d1e17] flex justify-between">
-                <Skeleton className="h-4 w-1/4" />
-                <Skeleton className="h-4 w-1/4" />
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    )
-  }
-
-  // Error State
-  if (isError) {
-    return (
-      <div className="min-h-96 flex flex-col items-center justify-center text-center p-8 bg-[#1b120e] border border-red-900/30 rounded-2xl">
-        <AlertCircle className="w-12 h-12 text-red-400 mb-4" />
-        <h3 className="text-lg font-bold text-[#f7f4ed] mb-1">Falha na consulta do catálogo</h3>
-        <p className="text-xs text-[#a69a8f] max-w-md mb-6">
-          {error?.response?.data?.message || 'Ocorreu um erro ao carregar as obras digitais. Tente novamente.'}
-        </p>
-        <Button onClick={() => refetch()} variant="secondary" size="sm">
-          Recarregar Ativos
-        </Button>
-      </div>
-    )
-  }
-
-  // Empty State
-  if (nfts.length === 0) {
-    return (
-      <div className="min-h-96 flex flex-col items-center justify-center text-center p-8 bg-[#1b120e] border border-[#2d1e17] rounded-2xl">
-        <p className="text-base font-semibold text-[#f7f4ed] mb-1">Nenhum NFT localizado</p>
-        <p className="text-xs text-[#a69a8f] max-w-sm mb-6">
-          Não encontramos nenhum ativo que corresponda aos filtros de busca e categoria selecionados.
-        </p>
-        <Button
-          onClick={() => navigate({ to: '/', search: () => ({ page: 1 }) })}
-          variant="outline"
-          size="sm"
-        >
-          Limpar Filtros de Busca
-        </Button>
-      </div>
-    )
+  const handleSortChange = (newSort: string) => {
+    navigate({
+      to: '/',
+      search: (prev: any) => ({
+        ...prev,
+        sortBy: newSort,
+        page: 1,
+      }),
+    })
   }
 
   return (
-    <div className="space-y-10">
-      {/* Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {nfts.map((nft) => (
-          <NFTCard key={nft.id} nft={nft} />
-        ))}
+    <div className="space-y-6">
+      {/* Top Filter Tabs & Sort Dropdown */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-3 border-b border-[#241712]">
+        {/* Left Tabs */}
+        <div className="flex items-center gap-6 text-xs font-semibold">
+          <button
+            onClick={() => setActiveTab('all')}
+            className={`relative py-1 transition-colors cursor-pointer ${
+              activeTab === 'all' ? 'text-[#f5efe6]' : 'text-[#8a7b70] hover:text-[#f5efe6]'
+            }`}
+          >
+            Todos os NFTs
+            {activeTab === 'all' && (
+              <span className="absolute -bottom-[13px] left-0 right-0 h-[2px] bg-[#d28a4c] rounded-full" />
+            )}
+          </button>
+
+          <button
+            onClick={() => setActiveTab('new')}
+            className={`relative py-1 transition-colors cursor-pointer ${
+              activeTab === 'new' ? 'text-[#f5efe6]' : 'text-[#8a7b70] hover:text-[#f5efe6]'
+            }`}
+          >
+            Novos lançamentos
+            {activeTab === 'new' && (
+              <span className="absolute -bottom-[13px] left-0 right-0 h-[2px] bg-[#d28a4c] rounded-full" />
+            )}
+          </button>
+
+          <button
+            onClick={() => setActiveTab('trending')}
+            className={`relative py-1 transition-colors cursor-pointer ${
+              activeTab === 'trending' ? 'text-[#f5efe6]' : 'text-[#8a7b70] hover:text-[#f5efe6]'
+            }`}
+          >
+            Em alta
+            {activeTab === 'trending' && (
+              <span className="absolute -bottom-[13px] left-0 right-0 h-[2px] bg-[#d28a4c] rounded-full" />
+            )}
+          </button>
+        </div>
+
+        {/* Right Sort Selector */}
+        <div className="flex items-center gap-2 text-xs text-[#8a7b70]">
+          <label htmlFor="sort-select" className="text-[11px]">
+            Ordenar por:
+          </label>
+          <select
+            id="sort-select"
+            value={sortBy}
+            onChange={(e) => handleSortChange(e.target.value)}
+            className="bg-transparent text-[#f5efe6] font-medium text-xs focus:outline-none cursor-pointer"
+          >
+            <option value="recent" className="bg-[#1a110d]">Listados recentemente</option>
+            <option value="price-asc" className="bg-[#1a110d]">Menor preço</option>
+            <option value="price-desc" className="bg-[#1a110d]">Maior preço</option>
+            <option value="popular" className="bg-[#1a110d]">Mais populares</option>
+          </select>
+        </div>
       </div>
 
-      {/* Pagination Controls */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-3 pt-6 border-t border-[#2d1e17]">
-          <Button
-            variant="secondary"
-            size="sm"
-            disabled={page <= 1}
-            onClick={() => handlePageChange(page - 1)}
-            aria-label="Página anterior"
+      {/* Loading Skeleton */}
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {Array.from({ length: 9 }).map((_, idx) => (
+            <div key={idx} className="space-y-2">
+              <Skeleton className="w-full aspect-square rounded-2xl" />
+              <Skeleton className="h-4 w-3/4 rounded" />
+              <Skeleton className="h-3 w-1/3 rounded" />
+            </div>
+          ))}
+        </div>
+      ) : isError ? (
+        <div className="min-h-72 flex flex-col items-center justify-center text-center p-8 bg-[#1a110d] border border-red-900/30 rounded-2xl">
+          <AlertCircle className="w-10 h-10 text-red-400 mb-3" />
+          <h3 className="text-base font-bold text-[#f5efe6] mb-1">Falha na consulta</h3>
+          <p className="text-xs text-[#8a7b70] max-w-sm mb-4">
+            {error?.response?.data?.message || 'Erro ao carregar o catálogo de obras.'}
+          </p>
+          <button
+            onClick={() => refetch()}
+            className="bg-[#d28a4c] text-white text-xs font-semibold px-4 py-2 rounded-lg"
           >
-            <ChevronLeft className="w-4 h-4 mr-1" /> Anterior
-          </Button>
-
-          <span className="text-xs text-[#a69a8f] font-medium px-4">
-            Página <strong className="text-[#f7f4ed]">{page}</strong> de{' '}
-            <strong className="text-[#f7f4ed]">{totalPages}</strong>
-          </span>
-
-          <Button
-            variant="secondary"
-            size="sm"
-            disabled={page >= totalPages}
-            onClick={() => handlePageChange(page + 1)}
-            aria-label="Próxima página"
+            Tentar novamente
+          </button>
+        </div>
+      ) : nfts.length === 0 ? (
+        <div className="min-h-72 flex flex-col items-center justify-center text-center p-8 bg-[#1a110d] border border-[#2d1c15] rounded-2xl">
+          <p className="text-sm font-semibold text-[#f5efe6] mb-1">Nenhum NFT encontrado</p>
+          <p className="text-xs text-[#8a7b70] mb-4">Tente ajustar seus filtros de busca.</p>
+          <button
+            onClick={() => navigate({ to: '/', search: () => ({ page: 1 }) })}
+            className="text-xs text-[#d28a4c] underline"
           >
-            Próxima <ChevronRight className="w-4 h-4 ml-1" />
-          </Button>
+            Limpar filtros
+          </button>
+        </div>
+      ) : (
+        /* The 3x3 Card Grid */
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {nfts.map((nft) => (
+            <NFTCard key={nft.id} nft={nft} />
+          ))}
         </div>
       )}
+
+      {/* Pagination Numbers Matching Reference */}
+      <div className="flex items-center justify-end gap-1.5 pt-6">
+        {[1, 2, 3, 4].map((p) => {
+          const isCurrent = page === p
+          return (
+            <button
+              key={p}
+              onClick={() => handlePageChange(p)}
+              className={`w-7 h-7 rounded text-xs font-bold flex items-center justify-center transition-colors cursor-pointer ${
+                isCurrent
+                  ? 'bg-[#d28a4c] text-white shadow-sm'
+                  : 'text-[#8a7b70] hover:text-[#f5efe6] hover:bg-[#1a110d]'
+              }`}
+            >
+              {p}
+            </button>
+          )
+        })}
+        <button
+          onClick={() => handlePageChange(Math.min(4, page + 1))}
+          className="w-7 h-7 rounded text-xs font-bold text-[#8a7b70] hover:text-[#f5efe6] flex items-center justify-center cursor-pointer"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
     </div>
   )
 }

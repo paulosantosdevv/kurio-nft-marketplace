@@ -2,6 +2,8 @@ import React from 'react'
 import { HeroBanner } from '../components/home/HeroBanner'
 import { NFTFilters } from '../components/nfts/NFTFilters'
 import { NFTGrid } from '../components/nfts/NFTGrid'
+import { PromoBanners } from '../components/home/PromoBanners'
+import { MintDiary } from '../components/home/MintDiary'
 import { useQuery } from '@tanstack/react-query'
 import { nftsApi } from '../api/client'
 import { useSearch } from '@tanstack/react-router'
@@ -34,36 +36,25 @@ export const HomeView: React.FC = () => {
   })
 
   return (
-    <div className="space-y-12">
-      {/* Hero Section */}
+    <div className="space-y-4">
+      {/* 1. Hero Section */}
       <HeroBanner />
 
-      {/* Catalog & Filter Section */}
-      <section id="catalogo" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
-          {/* Left Sidebar Filters */}
-          <div className="w-full md:w-64 lg:w-72 shrink-0">
+      {/* 2. Main Catalog Grid & Filters */}
+      <section id="catalogo" className="max-w-[1240px] mx-auto px-4 sm:px-6 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left Column: Filters & Featured Sidebar Card */}
+          <div className="lg:col-span-3">
             <NFTFilters
               currentCategory={category}
               currentPriceMin={priceMin}
               currentPriceMax={priceMax}
               currentNetwork={network}
-              currentSortBy={sortBy}
             />
           </div>
 
-          {/* Right Cards Grid */}
-          <div className="flex-1 min-w-0">
-            {/* Header info */}
-            <div className="flex items-center justify-between pb-6 mb-6 border-b border-[#2d1e17]">
-              <div>
-                <h2 className="text-xl font-bold text-[#f7f4ed]">Explorar Obras</h2>
-                <p className="text-xs text-[#a69a8f] mt-0.5">
-                  {data ? `${data.total} obras disponíveis na plataforma` : 'Carregando acervo...'}
-                </p>
-              </div>
-            </div>
-
+          {/* Right Column: Catalog Grid */}
+          <div className="lg:col-span-9">
             <NFTGrid
               nfts={data?.items || []}
               isLoading={isLoading}
@@ -73,10 +64,17 @@ export const HomeView: React.FC = () => {
               total={data?.total || 0}
               page={page}
               totalPages={data?.totalPages || 1}
+              sortBy={sortBy}
             />
           </div>
         </div>
       </section>
+
+      {/* 3. Promo Banners: Lançamentos Gênesis & Arte Digital */}
+      <PromoBanners />
+
+      {/* 4. Diário da Cunhagem (Articles Grid) */}
+      <MintDiary />
     </div>
   )
 }

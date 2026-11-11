@@ -1,30 +1,22 @@
 import React, { useState } from 'react'
-import { useNavigate } from '@tanstack/react-router'
-import { Button } from '../ui/Button'
-import { Input } from '../ui/Input'
-import { Filter, RotateCcw } from 'lucide-react'
+import { useNavigate, Link } from '@tanstack/react-router'
 
 export interface NFTFiltersProps {
   currentCategory?: string
   currentPriceMin?: string
   currentPriceMax?: string
   currentNetwork?: string
-  currentSortBy?: string
 }
 
 export const NFTFilters: React.FC<NFTFiltersProps> = ({
   currentCategory = 'todas',
-  currentPriceMin = '',
-  currentPriceMax = '',
-  currentNetwork = 'todas',
-  currentSortBy = 'recent',
+  currentPriceMax = '12.38',
+  currentNetwork = 'ethereum',
 }) => {
   const navigate = useNavigate()
-  const [minPrice, setMinPrice] = useState(currentPriceMin)
-  const [maxPrice, setMaxPrice] = useState(currentPriceMax)
+  const [sliderVal, setSliderVal] = useState(parseFloat(currentPriceMax) || 12.38)
 
   const categories = [
-    { id: 'todas', label: 'Todas as coleções', count: 119 },
     { id: 'arte-digital', label: 'Arte digital', count: 33 },
     { id: 'fotografia', label: 'Fotografia', count: 12 },
     { id: 'musica', label: 'Música', count: 65 },
@@ -37,17 +29,9 @@ export const NFTFilters: React.FC<NFTFiltersProps> = ({
   ]
 
   const networks = [
-    { id: 'todas', label: 'Todas as redes' },
-    { id: 'ethereum', label: 'Ethereum' },
-    { id: 'polygon', label: 'Polygon' },
-    { id: 'solana', label: 'Solana' },
-  ]
-
-  const sortOptions = [
-    { id: 'recent', label: 'Listados recentemente' },
-    { id: 'price-asc', label: 'Menor preço' },
-    { id: 'price-desc', label: 'Maior preço' },
-    { id: 'popular', label: 'Mais populares' },
+    { id: 'ethereum', label: 'Ethereum', count: 119 },
+    { id: 'polygon', label: 'Polygon', count: 78 },
+    { id: 'solana', label: 'Solana', count: 86 },
   ]
 
   const updateSearch = (updates: Record<string, any>) => {
@@ -56,7 +40,7 @@ export const NFTFilters: React.FC<NFTFiltersProps> = ({
       search: (prev: any) => ({
         ...prev,
         ...updates,
-        page: 1, // Reset pagination on any filter change
+        page: 1,
       }),
     })
   }
@@ -64,135 +48,115 @@ export const NFTFilters: React.FC<NFTFiltersProps> = ({
   const handleApplyPrice = (e: React.FormEvent) => {
     e.preventDefault()
     updateSearch({
-      priceMin: minPrice ? minPrice : undefined,
-      priceMax: maxPrice ? maxPrice : undefined,
-    })
-  }
-
-  const handleResetFilters = () => {
-    setMinPrice('')
-    setMaxPrice('')
-    navigate({
-      to: '/',
-      search: () => ({
-        page: 1,
-      }),
+      priceMin: '0.02',
+      priceMax: sliderVal.toString(),
     })
   }
 
   return (
-    <aside className="w-full space-y-8 text-xs text-[#a69a8f]">
-      {/* Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-[#2d1e17]">
-        <div className="flex items-center gap-2 font-bold text-[#f7f4ed] text-sm">
-          <Filter className="w-4 h-4 text-[#d28a4c]" /> Filtros
-        </div>
-        <button
-          onClick={handleResetFilters}
-          className="text-xs text-[#d28a4c] hover:underline flex items-center gap-1 cursor-pointer"
-        >
-          <RotateCcw className="w-3 h-3" /> Limpar
-        </button>
-      </div>
-
-      {/* Ordenação */}
-      <div>
-        <label htmlFor="sort-by-select" className="block text-xs font-bold text-[#f7f4ed] uppercase tracking-wider mb-2">
-          Ordenar por
-        </label>
-        <select
-          id="sort-by-select"
-          value={currentSortBy}
-          onChange={(e) => updateSearch({ sortBy: e.target.value })}
-          className="w-full bg-[#1b120e] text-[#f7f4ed] border border-[#3d2b21] rounded-lg p-2.5 text-xs focus:border-[#d28a4c] outline-none"
-        >
-          {sortOptions.map((opt) => (
-            <option key={opt.id} value={opt.id}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Coleções / Categorias */}
-      <div>
-        <h4 className="text-xs font-bold text-[#f7f4ed] uppercase tracking-wider mb-3">Coleções</h4>
-        <div className="space-y-1">
-          {categories.map((cat) => {
-            const isSelected = currentCategory === cat.id
-            return (
-              <button
-                key={cat.id}
-                onClick={() => updateSearch({ category: cat.id === 'todas' ? undefined : cat.id })}
-                className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-left transition-colors cursor-pointer ${
-                  isSelected
-                    ? 'bg-[#241914] text-[#d28a4c] font-semibold border border-[#d28a4c]/30'
-                    : 'hover:bg-[#1b120e] text-[#a69a8f]'
-                }`}
-              >
-                <span>{cat.label}</span>
-                <span className="text-[11px] text-[#786b62]">({cat.count})</span>
-              </button>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* Faixa de Preço */}
-      <div>
-        <h4 className="text-xs font-bold text-[#f7f4ed] uppercase tracking-wider mb-3">Faixa de preço (ETH)</h4>
-        <form onSubmit={handleApplyPrice} className="space-y-2.5">
-          <div className="grid grid-cols-2 gap-2">
-            <Input
-              placeholder="Mín"
-              type="number"
-              step="0.01"
-              value={minPrice}
-              onChange={(e) => setMinPrice(e.target.value)}
-              className="py-1.5 text-xs"
-            />
-            <Input
-              placeholder="Máx"
-              type="number"
-              step="0.01"
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(e.target.value)}
-              className="py-1.5 text-xs"
-            />
+    <div className="space-y-6">
+      {/* Box 1: Filters Box */}
+      <div className="bg-[#1a110d] border border-[#2d1c15] rounded-2xl p-5 text-xs text-[#8a7b70]">
+        {/* Coleções */}
+        <div>
+          <h4 className="text-xs font-bold text-[#f5efe6] uppercase tracking-wider mb-3">
+            Coleções
+          </h4>
+          <div className="space-y-1.5">
+            {categories.map((cat) => {
+              const isSelected = currentCategory === cat.id
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => updateSearch({ category: isSelected ? undefined : cat.id })}
+                  className={`w-full flex items-center justify-between text-left py-0.5 hover:text-[#f5efe6] transition-colors cursor-pointer ${
+                    isSelected ? 'text-[#d28a4c] font-semibold' : 'text-[#8a7b70]'
+                  }`}
+                >
+                  <span>{cat.label}</span>
+                  <span className="text-[11px] text-[#5e5148]">({cat.count})</span>
+                </button>
+              )
+            })}
           </div>
-          <Button type="submit" variant="secondary" size="sm" className="w-full text-xs">
-            Aplicar
-          </Button>
-        </form>
-      </div>
+        </div>
 
-      {/* Redes */}
-      <div>
-        <h4 className="text-xs font-bold text-[#f7f4ed] uppercase tracking-wider mb-3">Rede Blockchain</h4>
-        <div className="space-y-1.5">
-          {networks.map((net) => {
-            const isSelected = currentNetwork === net.id
-            return (
-              <label
-                key={net.id}
-                className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-[#1b120e] cursor-pointer"
-              >
-                <input
-                  type="radio"
-                  name="network"
-                  value={net.id}
-                  checked={isSelected}
-                  onChange={() => updateSearch({ network: net.id === 'todas' ? undefined : net.id })}
-                  className="accent-[#d28a4c]"
-                />
-                <span className={isSelected ? 'text-[#f7f4ed] font-medium' : 'text-[#a69a8f]'}>
-                  {net.label}
-                </span>
-              </label>
-            )
-          })}
+        {/* Faixa de Preço */}
+        <div className="pt-5 mt-5 border-t border-[#241712]">
+          <h4 className="text-xs font-bold text-[#f5efe6] uppercase tracking-wider mb-1">
+            Faixa de preço
+          </h4>
+          <span className="text-[11px] text-[#8a7b70] block mb-2">
+            Preço: 0,02 - {sliderVal.toFixed(2)} ETH
+          </span>
+
+          <form onSubmit={handleApplyPrice} className="space-y-3">
+            <input
+              type="range"
+              min="0.1"
+              max="15.0"
+              step="0.1"
+              value={sliderVal}
+              onChange={(e) => setSliderVal(parseFloat(e.target.value))}
+              className="w-full h-1 bg-[#3d281e] rounded-lg appearance-none cursor-pointer"
+            />
+            <button
+              type="submit"
+              className="bg-[#d28a4c] hover:bg-[#b87438] text-white text-[11px] font-bold px-4 py-1.5 rounded-md uppercase tracking-wider transition-colors cursor-pointer"
+            >
+              Aplicar
+            </button>
+          </form>
+        </div>
+
+        {/* Rede */}
+        <div className="pt-5 mt-5 border-t border-[#241712]">
+          <h4 className="text-xs font-bold text-[#f5efe6] uppercase tracking-wider mb-2.5">
+            Rede
+          </h4>
+          <div className="space-y-2">
+            {networks.map((net) => {
+              const isSelected = currentNetwork === net.id
+              return (
+                <label
+                  key={net.id}
+                  className="flex items-center gap-2 text-xs hover:text-[#f5efe6] cursor-pointer"
+                >
+                  <input
+                    type="radio"
+                    name="network_filter"
+                    value={net.id}
+                    checked={isSelected}
+                    onChange={() => updateSearch({ network: net.id })}
+                    className="accent-[#d28a4c]"
+                  />
+                  <span className={isSelected ? 'text-[#f5efe6] font-medium' : 'text-[#8a7b70]'}>
+                    {net.label} ({net.count})
+                  </span>
+                </label>
+              )
+            })}
+          </div>
         </div>
       </div>
-    </aside>
+
+      {/* Box 2: NFT EM DESTAQUE - OFERTA LIMITADA */}
+      <div className="bg-[#1a110d] border border-[#2d1c15] rounded-2xl p-5">
+        <span className="text-[10px] font-bold text-[#d28a4c] uppercase tracking-widest block">
+          NFT EM DESTAQUE
+        </span>
+        <h4 className="text-xs font-bold text-[#f5efe6] uppercase tracking-wider mt-0.5 mb-3">
+          OFERTA LIMITADA
+        </h4>
+
+        <Link to="/nft/$id" params={{ id: 'nft-2' }} className="block rounded-2xl overflow-hidden bg-[#ded7cb] shadow-md border border-[#2d1c15] hover:scale-[1.02] transition-transform">
+          <img
+            src="/assets/nfts/sidebar_nft.png"
+            alt="NFT em destaque na barra lateral"
+            className="w-full h-auto object-cover"
+          />
+        </Link>
+      </div>
+    </div>
   )
 }
