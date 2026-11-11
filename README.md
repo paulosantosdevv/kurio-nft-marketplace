@@ -200,34 +200,4 @@ git push -u origin main
 
 ---
 
-## 🌐 Como Colocar no Ar (Deploy)
-
-O projeto é uma Single Page Application (SPA) estática de alta performance gerada pelo Vite, compatível com qualquer provedor de hospedagem estática:
-
-### Opção 1: Vercel (Recomendado — 1 minuto)
-1. Instale a CLI da Vercel ou conecte o repositório diretamente no painel [vercel.com](https://vercel.com):
-   ```bash
-   npx vercel
-   ```
-2. Defina as opções de configuração:
-   * **Framework Preset**: `Vite`
-   * **Build Command**: `npm run build`
-   * **Output Directory**: `dist`
-3. O deploy será gerado instantaneamente com suporte total ao Service Worker do MSW.
-
-### Opção 2: Netlify
-1. Pelo terminal com a Netlify CLI:
-   ```bash
-   npx netlify deploy --build --prod
-   ```
-2. Diretório de publicação: `dist`.
-
----
-
-## 📐 Decisões Arquiteturais
-
-Para uma análise detalhada sobre modelagem de dados, tratamento de concorrência, idempotência e políticas de cache, consulte o documento [`ARCHITECTURE.md`](./ARCHITECTURE.md).
-
----
-
 Feito com foco em qualidade de engenharia, acessibilidade e atenção a cada detalhe visual.
