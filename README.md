@@ -20,9 +20,6 @@ A aplicação conta com arquitetura modular, estado de navegação com sincroniz
 - [Simulação de Cenários de Rede e Falhas (MSW)](#-simulação-de-cenários-de-rede-e-falhas-msw)
 - [Testes Automatizados (Playwright E2E)](#-testes-automatizados-playwright-e2e)
 - [Estrutura do Projeto](#-estrutura-do-projeto)
-- [Como Subir no GitHub](#-como-subir-no-github)
-- [Como Colocar no Ar (Deploy)](#-como-colocar-no-ar-deploy)
-- [Decisões Arquiteturais](#-decisões-arquiteturais)
 
 ---
 
@@ -180,24 +177,5 @@ kurio-nft-marketplace/
 
 ---
 
-## 📤 Como Subir no GitHub
-
-Para publicar o projeto em seu repositório pessoal no GitHub:
-
-1. **Crie um repositório vazio** no GitHub (ex: `kurio-nft-marketplace`).
-2. No terminal do projeto, execute os comandos:
-
-```bash
-# 1. Renomear o branch atual para main (padrão do GitHub)
-git branch -M main
-
-# 2. Vincular o repositório remoto (substitua pelo seu usuário e repositório)
-git remote add origin https://github.com/<SEU_USUARIO>/kurio-nft-marketplace.git
-
-# 3. Enviar o código com o histórico de commits
-git push -u origin main
-```
-
----
 
 Feito com foco em qualidade de engenharia, acessibilidade e atenção a cada detalhe visual.
