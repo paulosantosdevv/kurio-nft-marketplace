@@ -115,7 +115,7 @@ export const NFTGrid: React.FC<NFTGridProps> = ({
 
       {/* Loading Skeleton */}
       {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
           {Array.from({ length: 9 }).map((_, idx) => (
             <div key={idx} className="space-y-3">
               <Skeleton className="w-full aspect-square rounded-[22px]" />
@@ -150,8 +150,8 @@ export const NFTGrid: React.FC<NFTGridProps> = ({
           </button>
         </div>
       ) : (
-        /* The 3x3 Card Grid matching Figma */
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        /* The 2-column mobile / 3-column desktop Card Grid matching Figma */
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
           {nfts.map((nft) => (
             <NFTCard key={nft.id} nft={nft} />
           ))}

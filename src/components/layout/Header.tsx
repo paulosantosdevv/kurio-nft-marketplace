@@ -34,69 +34,69 @@ export const Header: React.FC = () => {
     <header className="sticky top-0 z-40 w-full bg-[#140d0a] border-b border-[#241712]">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
         {/* Left: Logo */}
-        <div className="flex items-center gap-10">
+        <div className="flex items-center">
           <Link
             to="/"
-            className="text-xl sm:text-2xl font-black tracking-wider text-[#f7f4ed] hover:text-[#d28a4c] transition-colors font-mono"
+            className="text-xl sm:text-2xl font-black tracking-widest text-[#f7f4ed] hover:text-[#d28a4c] transition-colors font-mono"
           >
             KURIO
           </Link>
-
-          {/* Center: Navigation Links */}
-          <nav className="hidden md:flex items-center gap-8 text-xs font-mono">
-            <Link
-              to="/"
-              className={`relative py-2 font-bold transition-colors ${
-                isHome ? 'text-[#f7f4ed]' : 'text-[#8a7b70] hover:text-[#f7f4ed]'
-              }`}
-            >
-              Início
-              {isHome && (
-                <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#d28a4c] rounded-full" />
-              )}
-            </Link>
-            <Link
-              to="/carrinho"
-              className={`relative py-2 font-bold transition-colors ${
-                isMarket ? 'text-[#f7f4ed]' : 'text-[#8a7b70] hover:text-[#f7f4ed]'
-              }`}
-            >
-              Mercado
-              {isMarket && (
-                <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#d28a4c] rounded-full" />
-              )}
-            </Link>
-            <span className="py-2 text-[#8a7b70] hover:text-[#f7f4ed] transition-colors cursor-pointer">
-              Criadores
-            </span>
-            <span className="py-2 text-[#8a7b70] hover:text-[#f7f4ed] transition-colors cursor-pointer">
-              Aprenda
-            </span>
-          </nav>
         </div>
 
+        {/* Center: Navigation Links matching Figma Desktop/Início */}
+        <nav className="hidden md:flex items-center gap-8 lg:gap-10 text-xs font-mono">
+          <Link
+            to="/"
+            className={`relative py-6 font-bold transition-colors ${
+              isHome ? 'text-[#d28a4c]' : 'text-[#d8d4cf] hover:text-[#f7f4ed]'
+            }`}
+          >
+            Início
+            {isHome && (
+              <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#d28a4c]" />
+            )}
+          </Link>
+          <Link
+            to="/carrinho"
+            className={`relative py-6 font-bold transition-colors ${
+              isMarket ? 'text-[#d28a4c]' : 'text-[#d8d4cf] hover:text-[#f7f4ed]'
+            }`}
+          >
+            Mercado
+            {isMarket && (
+              <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#d28a4c]" />
+            )}
+          </Link>
+          <span className="py-6 text-[#d8d4cf] hover:text-[#f7f4ed] transition-colors cursor-pointer">
+            Criadores
+          </span>
+          <span className="py-6 text-[#d8d4cf] hover:text-[#f7f4ed] transition-colors cursor-pointer">
+            Aprenda
+          </span>
+        </nav>
+
         {/* Right Actions */}
-        <div className="flex items-center gap-2 sm:gap-6">
-          {/* Search Input - visible on both mobile and desktop */}
-          <form onSubmit={handleSearchSubmit} className="flex relative items-center">
+        <div className="flex items-center gap-3 sm:gap-5">
+          {/* Search Input */}
+          <form onSubmit={handleSearchSubmit} className="relative flex items-center">
             <input
               type="text"
               placeholder="Buscar NFTs, coleções..."
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
-              className="bg-[#1c1410] text-[#f7f4ed] text-xs font-mono border border-[#2d1e17] rounded-xl pl-7 sm:pl-9 pr-2.5 sm:pr-4 py-1.5 sm:py-2 w-28 sm:w-64 lg:w-72 focus:outline-none focus:border-[#d28a4c] placeholder-[#6e5d52] transition-colors"
+              className="bg-[#1c1410] text-[#f7f4ed] text-xs font-mono border border-[#2d1e17] rounded-xl pl-8 pr-3 py-1.5 w-32 sm:w-44 focus:w-56 focus:outline-none focus:border-[#d28a4c] placeholder-[#6e5d52] transition-all"
             />
-            <Search className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-[#8a7b70] absolute left-2 sm:left-3 pointer-events-none" />
+            <Search className="w-3.5 h-3.5 text-[#8a7b70] absolute left-2.5 pointer-events-none" />
           </form>
 
           {/* Cart Icon with Badge */}
           <button
             onClick={() => setIsOpen(true)}
             aria-label="Abrir carrinho de NFTs"
-            className="relative text-[#8a7b70] hover:text-[#f7f4ed] p-2 transition-colors cursor-pointer"
+            className="relative text-[#8a7b70] hover:text-[#f7f4ed] p-1.5 transition-colors cursor-pointer"
           >
             <ShoppingBag className="w-5 h-5 text-[#f7f4ed]" />
-            <span className="absolute -top-0.5 -right-0.5 bg-[#d28a4c] text-[#140d0a] text-[10px] font-bold font-mono w-4 h-4 rounded-full flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 bg-[#d28a4c] text-[#140d0a] text-[10px] font-bold font-mono w-4 h-4 rounded-full flex items-center justify-center">
               {count}
             </span>
           </button>
@@ -155,7 +155,7 @@ export const Header: React.FC = () => {
             </div>
           ) : (
             <Link to="/login">
-              <button className="bg-[#d28a4c] hover:bg-[#e0985a] text-[#140d0a] font-mono text-xs font-bold px-4 sm:px-5 py-2.5 rounded-xl flex items-center gap-2 transition-colors cursor-pointer shadow-sm">
+              <button className="bg-[#d28a4c] hover:bg-[#e0985a] text-[#140d0a] font-mono text-xs font-bold px-4 py-2 rounded-lg flex items-center gap-2 transition-colors cursor-pointer shadow-sm">
                 <LogIn className="w-3.5 h-3.5" />
                 <span>Entrar</span>
               </button>

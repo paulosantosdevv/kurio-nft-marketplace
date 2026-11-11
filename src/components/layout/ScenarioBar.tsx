@@ -22,7 +22,7 @@ export const ScenarioBar: React.FC = () => {
   return (
     <aside
       aria-label="Painel de controle de cenários e testes"
-      className="fixed bottom-3 right-3 z-[100] flex flex-col items-end"
+      className="fixed bottom-20 right-3 md:bottom-3 md:right-3 z-[100] flex flex-col items-end opacity-85 hover:opacity-100 transition-opacity"
     >
       {isOpen && (
         <div

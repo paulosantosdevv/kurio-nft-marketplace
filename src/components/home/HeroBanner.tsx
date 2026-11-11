@@ -63,47 +63,49 @@ export const HeroBanner: React.FC = () => {
         </div>
 
         {/* Desktop Hero Layout matching Desktop/Início.png */}
-        <div className="hidden md:grid grid-cols-12 gap-8 lg:gap-12 items-center">
-          {/* Left Column: Text & CTA */}
-          <div className="col-span-7 space-y-6">
-            <p className="text-xs text-[#8a7b70] font-mono tracking-wider">
-              Bem-vindo à Kurio
-            </p>
+        <div className="hidden md:block space-y-6">
+          <div className="grid grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left Column: Text & CTA */}
+            <div className="col-span-7 space-y-6">
+              <p className="text-xs text-[#8a7b70] font-mono tracking-wider">
+                Bem-vindo à Kurio
+              </p>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#f7f4ed] tracking-tight leading-[1.15] font-mono">
-              SEJA DONO DO FUTURO <br />DA ARTE DIGITAL
-            </h1>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#f7f4ed] tracking-tight leading-[1.15] font-mono">
+                SEJA DONO DO FUTURO <br />DA ARTE DIGITAL
+              </h1>
 
-            <p className="text-xs sm:text-sm text-[#8a7b70] max-w-lg leading-relaxed font-mono">
-              Descubra NFTs selecionados de criadores emergentes e consagrados. Colecione arte digital rara, apoie artistas e tenha uma parte da cultura da internet.
-            </p>
+              <p className="text-xs sm:text-sm text-[#8a7b70] max-w-lg leading-relaxed font-mono">
+                Descubra NFTs selecionados de criadores emergentes e consagrados. Colecione arte digital rara, apoie artistas e tenha uma parte da cultura da internet.
+              </p>
 
-            <div className="pt-2">
-              <button
-                onClick={handleScrollToCatalog}
-                className="bg-[#d28a4c] hover:bg-[#e0985a] text-[#140d0a] font-mono text-xs font-bold px-8 py-3 rounded-xl tracking-wider uppercase transition-colors cursor-pointer shadow-md"
-              >
-                EXPLORAR
-              </button>
+              <div className="pt-2">
+                <button
+                  onClick={handleScrollToCatalog}
+                  className="bg-[#d28a4c] hover:bg-[#e0985a] text-[#140d0a] font-mono text-xs font-bold px-8 py-3 rounded-xl tracking-wider uppercase transition-colors cursor-pointer shadow-md"
+                >
+                  EXPLORAR
+                </button>
+              </div>
             </div>
 
-            {/* Carousel dots indicator */}
-            <div className="flex items-center gap-2 pt-2">
-              <span className="w-2 h-2 rounded-full bg-[#d28a4c]" />
-              <span className="w-2 h-2 rounded-full bg-[#3d2b21]" />
-              <span className="w-2 h-2 rounded-full bg-[#3d2b21]" />
+            {/* Right Column: Hero Character Artwork (Figma Desktop/Início) */}
+            <div className="col-span-5 flex justify-end">
+              <div className="relative w-full max-w-[460px] aspect-square rounded-[32px] overflow-hidden shadow-2xl border border-[#2d1e17] bg-[#ded7cb]">
+                <img
+                  src="/assets/nfts/hero_character.png"
+                  alt="Emerald Ape NFT em destaque — Kurio"
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Right Column: Hero Character Artwork (Figma Desktop/Início) */}
-          <div className="col-span-5 flex justify-end">
-            <div className="relative w-full max-w-[460px] aspect-square rounded-[32px] overflow-hidden shadow-2xl border border-[#2d1e17] bg-[#ded7cb]">
-              <img
-                src="/assets/nfts/hero_character.png"
-                alt="Emerald Ape NFT em destaque — Kurio"
-                className="w-full h-full object-cover"
-              />
-            </div>
+          {/* Carousel dots indicator centered */}
+          <div className="flex justify-center items-center gap-2 pt-2">
+            <span className="w-2 h-2 rounded-full bg-[#d28a4c]" />
+            <span className="w-2 h-2 rounded-full bg-[#3d2b21]" />
+            <span className="w-2 h-2 rounded-full bg-[#3d2b21]" />
           </div>
         </div>
       </div>

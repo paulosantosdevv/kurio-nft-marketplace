@@ -48,8 +48,14 @@ export const LoginView: React.FC = () => {
           <X className="w-5 h-5" />
         </Link>
 
-        {/* Top Header Tabs */}
+        {/* Logo & Header Tabs matching Mobile/Login.png */}
         <div className="text-center pt-2">
+          <Link
+            to="/"
+            className="text-2xl font-black tracking-widest text-[#f7f4ed] hover:text-[#d28a4c] transition-colors font-mono block mb-4"
+          >
+            KURIO
+          </Link>
           <div className="inline-flex items-center gap-1.5 text-base sm:text-lg font-bold">
             <span className="text-[#d28a4c]">Entrar</span>
             <span className="text-[#8a7b70]">|</span>
