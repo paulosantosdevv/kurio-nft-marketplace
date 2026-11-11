@@ -118,26 +118,33 @@ export const NFTDetailView: React.FC = () => {
   }
 
   const relatedCards = [
-    { id: 'nft-4', title: 'Cosmic Bloom #118', price: '1.29 ETH', image: '/assets/nfts/card_4_cosmic_bloom.png' },
-    { id: 'nft-5', title: 'Violet Nomad #314', price: '1.39 ETH', image: '/assets/nfts/card_5_violet_nomad.png' },
-    { id: 'nft-6', title: 'Ivory Baron #088', price: '1.79 ETH', image: '/assets/nfts/card_6_ivory_baron.png' },
-    { id: 'nft-7', title: 'Golden Beat #207', price: '0.99 ETH', image: '/assets/nfts/card_7_golden_beat_1.png' },
-    { id: 'nft-9', title: 'Golden Signal #160', price: '0.39 ETH', image: '/assets/nfts/card_9_golden_signal.png' },
+    { id: 'nft-4', title: 'Cosmic Bloom #118', price: '1.29 ETH', image: '/assets/nfts/card_4_cosmic_bloom.webp' },
+    { id: 'nft-5', title: 'Violet Nomad #314', price: '1.39 ETH', image: '/assets/nfts/card_5_violet_nomad.webp' },
+    { id: 'nft-6', title: 'Ivory Baron #088', price: '1.79 ETH', image: '/assets/nfts/card_6_ivory_baron.webp' },
+    { id: 'nft-7', title: 'Golden Beat #207', price: '0.99 ETH', image: '/assets/nfts/card_7_golden_beat_1.webp' },
+    { id: 'nft-9', title: 'Golden Signal #160', price: '0.39 ETH', image: '/assets/nfts/card_9_golden_signal.webp' },
   ]
 
   if (isLoading) {
     return (
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12 font-mono">
-        <Skeleton className="h-6 w-32" />
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
-          <div className="md:col-span-6">
-            <Skeleton className="w-full aspect-square rounded-[24px]" />
-          </div>
-          <div className="md:col-span-6 space-y-6">
-            <Skeleton className="h-10 w-3/4" />
-            <Skeleton className="h-6 w-1/3" />
-            <Skeleton className="h-20 w-full" />
-            <Skeleton className="h-12 w-full" />
+      <div className="min-h-screen bg-[#140d0a] text-[#f7f4ed] font-mono">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 space-y-8 pb-32 md:pb-12">
+          <Skeleton className="h-4 w-32 rounded" />
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+            <div className="md:col-span-6 flex gap-4">
+              <div className="hidden md:flex flex-col gap-3 w-16 lg:w-20 shrink-0">
+                <Skeleton className="w-16 h-16 lg:w-20 lg:h-20 rounded-2xl" />
+                <Skeleton className="w-16 h-16 lg:w-20 lg:h-20 rounded-2xl" />
+                <Skeleton className="w-16 h-16 lg:w-20 lg:h-20 rounded-2xl" />
+              </div>
+              <Skeleton className="relative flex-1 aspect-square rounded-[28px]" />
+            </div>
+            <div className="md:col-span-6 space-y-6">
+              <Skeleton className="h-8 w-3/4 rounded-xl" />
+              <Skeleton className="h-6 w-1/3 rounded-lg" />
+              <Skeleton className="h-24 w-full rounded-2xl" />
+              <Skeleton className="h-12 w-1/2 rounded-xl" />
+            </div>
           </div>
         </div>
       </div>
@@ -167,8 +174,8 @@ export const NFTDetailView: React.FC = () => {
 
   const thumbImages = [
     nft.imageUrl,
-    '/assets/nfts/card_1_emerald_ape.png',
-    '/assets/nfts/hero_character.png',
+    '/assets/nfts/card_1_emerald_ape.webp',
+    '/assets/nfts/hero_character.webp',
     nft.imageUrl,
   ]
 
@@ -208,13 +215,20 @@ export const NFTDetailView: React.FC = () => {
                 <button
                   key={idx}
                   onClick={() => setSelectedThumbIndex(idx)}
+                  aria-label={`Visualizar miniatura ${idx + 1}`}
                   className={`w-16 h-16 lg:w-20 lg:h-20 rounded-2xl overflow-hidden bg-[#ded7cb] border-2 transition-all cursor-pointer ${
                     selectedThumbIndex === idx
                       ? 'border-[#d28a4c] shadow-md'
                       : 'border-[#2d1e17] opacity-80 hover:opacity-100'
                   }`}
                 >
-                  <img src={src} alt={`preview-${idx}`} className="w-full h-full object-cover" />
+                  <img
+                    src={src}
+                    alt={`Miniatura ${idx + 1} de ${nft.title}`}
+                    width={80}
+                    height={80}
+                    className="w-full h-full object-cover"
+                  />
                 </button>
               ))}
             </div>
@@ -224,6 +238,10 @@ export const NFTDetailView: React.FC = () => {
               <img
                 src={thumbImages[selectedThumbIndex] || nft.imageUrl}
                 alt={nft.title}
+                fetchPriority="high"
+                decoding="async"
+                width={600}
+                height={600}
                 className="w-full h-full object-cover"
               />
               <button
@@ -268,9 +286,9 @@ export const NFTDetailView: React.FC = () => {
             <div className="border-t border-[#241712]" />
 
             <div>
-              <h4 className="text-xs font-bold text-[#f7f4ed] uppercase tracking-wider mb-2">
+              <h2 className="text-xs font-bold text-[#f7f4ed] uppercase tracking-wider mb-2">
                 Sobre este NFT:
-              </h4>
+              </h2>
               <p className="text-xs text-[#a69a8f] leading-relaxed">
                 {nft.description ||
                   'Um colecionável digital finalizado à mão da coleção Kurio Editions, verificado na Ethereum, com arte desbloqueável e acesso para colecionadores.'}
@@ -278,7 +296,7 @@ export const NFTDetailView: React.FC = () => {
             </div>
 
             {/* Creator / Provenance with exact text match for tests */}
-            <div className="flex items-center gap-2 text-xs text-[#8a7b70]">
+            <div className="flex items-center gap-2 text-xs text-[#a69a8f]">
               <span>Criado por:</span>
               <span className="text-[#f7f4ed] font-semibold">{nft.creator.name}</span>
               <Check className="w-3.5 h-3.5 text-[#d28a4c]" />
@@ -297,7 +315,7 @@ export const NFTDetailView: React.FC = () => {
                     className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
                       selectedEdition === ed
                         ? 'border border-[#d28a4c] text-[#d28a4c] bg-[#241712]'
-                        : 'border border-[#3d2b21] text-[#8a7b70] hover:text-[#f7f4ed]'
+                        : 'border border-[#3d2b21] text-[#dcd1c4] hover:text-[#f7f4ed]'
                     }`}
                   >
                     {ed}
@@ -342,13 +360,13 @@ export const NFTDetailView: React.FC = () => {
                 onClick={handleFavoriteClick}
                 className="flex items-center gap-2 border border-[#3d2b21] hover:border-[#d28a4c] px-6 py-3 rounded-xl text-xs text-[#f7f4ed] transition-colors cursor-pointer"
               >
-                <Heart className={`w-4 h-4 ${isFav ? 'fill-[#d28a4c] text-[#d28a4c]' : 'text-[#8a7b70]'}`} />
+                <Heart className={`w-4 h-4 ${isFav ? 'fill-[#d28a4c] text-[#d28a4c]' : 'text-[#a69a8f]'}`} />
                 <span>Favoritar</span>
               </button>
             </div>
 
             {/* Metadata lines */}
-            <div className="space-y-1.5 pt-2 text-xs text-[#8a7b70]">
+            <div className="space-y-1.5 pt-2 text-xs text-[#a69a8f]">
               <div>
                 <span>ID do token: </span>
                 <span className="text-[#a69a8f]">{nft.tokenId || '#0042'}</span>
@@ -368,17 +386,29 @@ export const NFTDetailView: React.FC = () => {
             </div>
 
             {/* Social Share */}
-            <div className="flex items-center gap-3 pt-2 text-xs text-[#8a7b70]">
+            <div className="flex items-center gap-3 pt-2 text-xs text-[#a69a8f]">
               <span>Compartilhar este NFT:</span>
               <div className="flex items-center gap-3 text-[#a69a8f]">
-                <button onClick={handleShare} aria-label="LinkedIn" className="hover:text-[#d28a4c] transition-colors cursor-pointer">
-                  <span className="font-bold text-[11px] underline">in</span>
+                <button
+                  onClick={handleShare}
+                  aria-label="Compartilhar no LinkedIn"
+                  className="w-8 h-8 rounded-full flex items-center justify-center hover:text-[#d28a4c] transition-colors cursor-pointer"
+                >
+                  <span aria-hidden="true" className="font-bold text-[11px] underline">in</span>
                 </button>
-                <button onClick={handleShare} aria-label="E-mail" className="hover:text-[#d28a4c] transition-colors cursor-pointer">
+                <button
+                  onClick={handleShare}
+                  aria-label="Compartilhar por E-mail"
+                  className="w-8 h-8 rounded-full flex items-center justify-center hover:text-[#d28a4c] transition-colors cursor-pointer"
+                >
                   <Mail className="w-3.5 h-3.5" />
                 </button>
-                <button onClick={handleShare} aria-label="Twitter" className="hover:text-[#d28a4c] transition-colors cursor-pointer">
-                  <span className="font-bold text-[11px]">𝕏</span>
+                <button
+                  onClick={handleShare}
+                  aria-label="Compartilhar no Twitter X"
+                  className="w-8 h-8 rounded-full flex items-center justify-center hover:text-[#d28a4c] transition-colors cursor-pointer"
+                >
+                  <span aria-hidden="true" className="font-bold text-[11px]">𝕏</span>
                 </button>
               </div>
               {copied && <span className="text-emerald-400 text-[11px]">Link copiado!</span>}
@@ -390,10 +420,11 @@ export const NFTDetailView: React.FC = () => {
         <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#1c1410] border-t border-[#2d1e17] px-6 py-4 shadow-2xl space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="text-xs text-[#8a7b70]">Qtd.</span>
+              <span className="text-xs text-[#a69a8f]">Qtd.</span>
               <div className="flex items-center gap-2 bg-[#140d0a] border border-[#2d1e17] rounded-full px-2 py-0.5">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  aria-label="Diminuir quantidade"
                   className="w-6 h-6 rounded-full bg-[#d28a4c] text-[#140d0a] font-bold flex items-center justify-center text-xs"
                 >
                   -
@@ -401,6 +432,7 @@ export const NFTDetailView: React.FC = () => {
                 <span className="font-bold text-xs text-[#f7f4ed] w-4 text-center">{quantity}</span>
                 <button
                   onClick={() => setQuantity(quantity + 1)}
+                  aria-label="Aumentar quantidade"
                   className="w-6 h-6 rounded-full bg-[#d28a4c] text-[#140d0a] font-bold flex items-center justify-center text-xs"
                 >
                   +
@@ -463,20 +495,20 @@ export const NFTDetailView: React.FC = () => {
                 </p>
                 <div className="space-y-3 pt-2">
                   <div>
-                    <h5 className="font-bold text-[#f7f4ed] mb-1">Rede:</h5>
-                    <p className="text-[#8a7b70]">
+                    <div className="font-bold text-[#f7f4ed] mb-1">Rede:</div>
+                    <p className="text-[#a69a8f]">
                       Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.
                     </p>
                   </div>
                   <div>
-                    <h5 className="font-bold text-[#f7f4ed] mb-1">Contrato:</h5>
-                    <p className="text-[#8a7b70]">
+                    <div className="font-bold text-[#f7f4ed] mb-1">Contrato:</div>
+                    <p className="text-[#a69a8f]">
                       Direitos autorais do criador: 5% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.
                     </p>
                   </div>
                   <div>
-                    <h5 className="font-bold text-[#f7f4ed] mb-1">Direitos autorais:</h5>
-                    <p className="text-[#8a7b70]">
+                    <div className="font-bold text-[#f7f4ed] mb-1">Direitos autorais:</div>
+                    <p className="text-[#a69a8f]">
                       0x7A42...19E8 • Contrato inteligente ERC-721 verificado.
                     </p>
                   </div>
@@ -519,6 +551,10 @@ export const NFTDetailView: React.FC = () => {
                   <img
                     src={item.image}
                     alt={item.title}
+                    loading="lazy"
+                    decoding="async"
+                    width={200}
+                    height={200}
                     className="w-full h-full object-cover rounded-[14px]"
                   />
                 </div>

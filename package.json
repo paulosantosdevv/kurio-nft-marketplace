@@ -12,7 +12,7 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:report": "playwright show-report",
-    "audit:lighthouse": "node scripts/audit.mjs"
+    "audit:lighthouse": "node scripts/run-audit.mjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.107.1",
@@ -38,6 +38,7 @@
     "lighthouse": "^13.6.0",
     "msw": "^3.0.5",
     "oxlint": "^1.90.0",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4.3.5",
     "typescript": "~7.0.2",
     "vite": "^8.3.6"

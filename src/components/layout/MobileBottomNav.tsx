@@ -23,8 +23,8 @@ export const MobileBottomNav: React.FC = () => {
       {/* 1. Home */}
       <Link
         to="/"
-        className={`flex flex-col items-center justify-center p-1.5 transition-colors ${
-          currentPath === '/' ? 'text-[#d28a4c]' : 'text-[#8a7b70] hover:text-[#f7f4ed]'
+        className={`flex flex-col items-center justify-center p-2 min-w-[44px] min-h-[44px] transition-colors ${
+          currentPath === '/' ? 'text-[#d28a4c]' : 'text-[#dcd1c4] hover:text-[#f7f4ed]'
         }`}
         aria-label="Página Inicial"
       >
@@ -34,7 +34,7 @@ export const MobileBottomNav: React.FC = () => {
       {/* 2. Favoritos / Lista */}
       <Link
         to={isAuthenticated ? '/perfil' : '/login'}
-        className="flex flex-col items-center justify-center p-1.5 text-[#8a7b70] hover:text-[#f7f4ed] transition-colors"
+        className="flex flex-col items-center justify-center p-2 min-w-[44px] min-h-[44px] text-[#dcd1c4] hover:text-[#f7f4ed] transition-colors"
         aria-label="Favoritos"
       >
         <Heart className="w-5 h-5" />
@@ -54,14 +54,14 @@ export const MobileBottomNav: React.FC = () => {
       {/* 4. Carrinho */}
       <Link
         to="/carrinho"
-        className={`relative flex flex-col items-center justify-center p-1.5 transition-colors ${
-          currentPath.startsWith('/carrinho') ? 'text-[#d28a4c]' : 'text-[#8a7b70] hover:text-[#f7f4ed]'
+        className={`relative flex flex-col items-center justify-center p-2 min-w-[44px] min-h-[44px] transition-colors ${
+          currentPath.startsWith('/carrinho') ? 'text-[#d28a4c]' : 'text-[#dcd1c4] hover:text-[#f7f4ed]'
         }`}
         aria-label="Carrinho de NFTs"
       >
         <ShoppingBag className="w-5 h-5" />
         {count > 0 && (
-          <span className="absolute -top-1 -right-1 bg-[#d28a4c] text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center font-mono">
+          <span className="absolute -top-1 -right-1 bg-[#d28a4c] text-[#140d0a] text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center font-mono">
             {count}
           </span>
         )}
@@ -70,10 +70,10 @@ export const MobileBottomNav: React.FC = () => {
       {/* 5. Perfil */}
       <Link
         to={isAuthenticated ? '/perfil' : '/login'}
-        className={`flex flex-col items-center justify-center p-1.5 transition-colors ${
+        className={`flex flex-col items-center justify-center p-2 min-w-[44px] min-h-[44px] transition-colors ${
           currentPath.startsWith('/perfil') || currentPath.startsWith('/carteiras')
             ? 'text-[#d28a4c]'
-            : 'text-[#8a7b70] hover:text-[#f7f4ed]'
+            : 'text-[#dcd1c4] hover:text-[#f7f4ed]'
         }`}
         aria-label="Perfil do Usuário"
       >

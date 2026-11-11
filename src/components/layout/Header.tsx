@@ -82,21 +82,22 @@ export const Header: React.FC = () => {
             <input
               type="text"
               placeholder="Buscar NFTs, coleções..."
+              aria-label="Buscar NFTs e coleções"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
-              className="bg-[#1c1410] text-[#f7f4ed] text-xs font-mono border border-[#2d1e17] rounded-xl pl-8 pr-3 py-1.5 w-32 sm:w-44 focus:w-56 focus:outline-none focus:border-[#d28a4c] placeholder-[#6e5d52] transition-all"
+              className="bg-[#1c1410] text-[#f7f4ed] text-xs font-mono border border-[#2d1e17] rounded-xl pl-8 pr-3 py-1.5 w-32 sm:w-44 focus:w-56 focus:outline-none focus:border-[#d28a4c] placeholder-[#a69a8f] transition-all"
             />
-            <Search className="w-3.5 h-3.5 text-[#8a7b70] absolute left-2.5 pointer-events-none" />
+            <Search className="w-3.5 h-3.5 text-[#a69a8f] absolute left-2.5 pointer-events-none" />
           </form>
 
           {/* Cart Icon with Badge */}
           <button
             onClick={() => setIsOpen(true)}
             aria-label="Abrir carrinho de NFTs"
-            className="relative text-[#8a7b70] hover:text-[#f7f4ed] p-1.5 transition-colors cursor-pointer"
+            className="relative text-[#a69a8f] hover:text-[#f7f4ed] p-1.5 transition-colors cursor-pointer"
           >
             <ShoppingBag className="w-5 h-5 text-[#f7f4ed]" />
-            <span className="absolute -top-1 -right-1 bg-[#d28a4c] text-[#140d0a] text-[10px] font-bold font-mono w-4 h-4 rounded-full flex items-center justify-center">
+            <span aria-hidden="true" className="absolute -top-1 -right-1 bg-[#d28a4c] text-[#140d0a] text-[10px] font-bold font-mono w-4 h-4 rounded-full flex items-center justify-center">
               {count}
             </span>
           </button>

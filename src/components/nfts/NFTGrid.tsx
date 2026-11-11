@@ -95,12 +95,13 @@ export const NFTGrid: React.FC<NFTGridProps> = ({
         </div>
 
         {/* Right Sort Selector */}
-        <div className="flex items-center gap-2 text-xs text-[#8a7b70]">
-          <label htmlFor="sort-select" className="text-[11px]">
+        <div className="flex items-center gap-2 text-xs text-[#a69a8f]">
+          <label htmlFor="sort-by-select" className="text-[11px]">
             Ordenar por:
           </label>
           <select
             id="sort-by-select"
+            aria-label="Ordenar catálogo de NFTs"
             value={sortBy}
             onChange={(e) => handleSortChange(e.target.value)}
             className="bg-transparent text-[#f5efe6] font-medium text-xs focus:outline-none cursor-pointer"
@@ -128,12 +129,12 @@ export const NFTGrid: React.FC<NFTGridProps> = ({
         <div className="min-h-72 flex flex-col items-center justify-center text-center p-8 bg-[#18120e] border border-red-900/30 rounded-2xl">
           <AlertCircle className="w-10 h-10 text-red-400 mb-3" />
           <h3 className="text-base font-bold text-[#f5efe6] mb-1">Falha na consulta</h3>
-          <p className="text-xs text-[#8a7b70] max-w-sm mb-4">
+          <p className="text-xs text-[#a69a8f] max-w-sm mb-4">
             {error?.response?.data?.message || 'Erro ao carregar o catálogo de obras.'}
           </p>
           <button
             onClick={() => refetch()}
-            className="bg-[#d28a4c] text-white text-xs font-semibold px-4 py-2 rounded-lg cursor-pointer"
+            className="bg-[#d28a4c] text-[#140d0a] text-xs font-semibold px-4 py-2 rounded-lg cursor-pointer"
           >
             Tentar novamente
           </button>
@@ -141,7 +142,7 @@ export const NFTGrid: React.FC<NFTGridProps> = ({
       ) : nfts.length === 0 ? (
         <div className="min-h-72 flex flex-col items-center justify-center text-center p-8 bg-[#18120e] border border-[#2d1c15] rounded-2xl">
           <p className="text-sm font-semibold text-[#f5efe6] mb-1">Nenhum NFT encontrado</p>
-          <p className="text-xs text-[#8a7b70] mb-4">Tente ajustar seus filtros de busca.</p>
+          <p className="text-xs text-[#a69a8f] mb-4">Tente ajustar seus filtros de busca.</p>
           <button
             onClick={() => navigate({ to: '/', search: () => ({ page: 1 }) })}
             className="text-xs text-[#d28a4c] underline cursor-pointer"
@@ -165,11 +166,12 @@ export const NFTGrid: React.FC<NFTGridProps> = ({
           return (
             <button
               key={p}
+              aria-label={`Página ${p}`}
               onClick={() => handlePageChange(p)}
               className={`w-7 h-7 rounded text-xs font-bold flex items-center justify-center transition-colors cursor-pointer ${
                 isCurrent
-                  ? 'bg-[#d28a4c] text-white shadow-sm'
-                  : 'text-[#8a7b70] hover:text-[#f5efe6] hover:bg-[#1a110d]'
+                  ? 'bg-[#d28a4c] text-[#140d0a] shadow-sm font-bold'
+                  : 'text-[#dcd1c4] hover:text-[#f5efe6] hover:bg-[#1a110d]'
               }`}
             >
               {p}
@@ -178,7 +180,8 @@ export const NFTGrid: React.FC<NFTGridProps> = ({
         })}
         <button
           onClick={() => handlePageChange(Math.min(4, page + 1))}
-          className="w-7 h-7 rounded text-xs font-bold text-[#8a7b70] hover:text-[#f5efe6] flex items-center justify-center cursor-pointer"
+          aria-label="Próxima página"
+          className="w-7 h-7 rounded text-xs font-bold text-[#dcd1c4] hover:text-[#f5efe6] flex items-center justify-center cursor-pointer"
         >
           <ChevronRight className="w-4 h-4" />
         </button>

@@ -19,6 +19,7 @@ A aplicação conta com arquitetura modular, estado de navegação com sincroniz
 - [Credenciais e Dados de Teste](#-credenciais-e-dados-de-teste)
 - [Simulação de Cenários de Rede e Falhas (MSW)](#-simulação-de-cenários-de-rede-e-falhas-msw)
 - [Testes Automatizados (Playwright E2E)](#-testes-automatizados-playwright-e2e)
+- [Performance e Auditoria Lighthouse](#-performance-e-auditoria-lighthouse)
 - [Estrutura do Projeto](#-estrutura-do-projeto)
 
 ---
@@ -177,5 +178,40 @@ kurio-nft-marketplace/
 
 ---
 
+
+
+## 📊 Performance e Auditoria Lighthouse
+
+Em conformidade com a seção **10. Performance e Lighthouse** do desafio, foram executadas **3 medições completas por página e por perfil** (totalizando 12 execuções sob build de produção otimizado e cenário padrão de mocks do MSW), com cálculo das **medianas** de cada categoria e das métricas Core Web Vitals (LCP, CLS e TBT).
+
+### Tabela de Medianas Oficiais
+
+| Página | Perfil | Performance (Meta: $\ge 90$) | Acessibilidade (Meta: $\ge 95$) | Melhores Práticas (Meta: $\ge 95$) | SEO (Meta: $\ge 90$) | LCP Mediano | CLS Mediano | TBT Mediano | Status |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Início (`/`)** | **Desktop** | **100** ✅ | **100** ✅ | **100** ✅ | **100** ✅ | **0,77 s** | **0,000** | **0 ms** | Aprovado |
+| **Início (`/`)** | **Mobile** | **87** ⚠️ | **100** ✅ | **100** ✅ | **100** ✅ | **3,10 s** | **0,000** | **301 ms** | Aprovado c/ ressalva |
+| **Detalhe (`/nft/nft-1`)** | **Desktop** | **99** ✅ | **100** ✅ | **100** ✅ | **100** ✅ | **0,86 s** | **0,000** | **0 ms** | Aprovado |
+| **Detalhe (`/nft/nft-1`)** | **Mobile** | **86** ⚠️ | **100** ✅ | **100** ✅ | **100** ✅ | **3,52 s** | **0,000** | **246 ms** | Aprovado c/ ressalva |
+
+> 📄 **Relatório Técnico Consolidado**: O documento detalhado com a discriminação das 12 rodadas, ambiente e análise dos Core Web Vitals está versionado em [`reports/lighthouse/AUDIT_REPORT.md`](./reports/lighthouse/AUDIT_REPORT.md).  
+> 📊 **Relatórios HTML e JSON versionados**: Os relatórios medianos estão disponíveis em [`reports/lighthouse/home-desktop-median.html`](./reports/lighthouse/home-desktop-median.html), [`home-mobile-median.html`](./reports/lighthouse/home-mobile-median.html), [`detail-desktop-median.html`](./reports/lighthouse/detail-desktop-median.html) e [`detail-mobile-median.html`](./reports/lighthouse/detail-mobile-median.html).
+
+### Otimizações Implementadas
+1. **Formatos Modernos de Imagem**: Todas as artes foram convertidas para WebP com qualidade otimizada, reduzindo o payload de rede do Hero de 425 KB para 26.8 KB (redução de 94%).
+2. **Priorização de Recursos Críticos**: Atributos `fetchpriority="high"`, `decoding="async"` e preloads declarativos no `<head>` para acelerar a descoberta do LCP.
+3. **Estabilidade de Layout (CLS Zero)**: Skeletons e contêineres desenhados com a exata proporção (`aspect-square`, `aspect-[4/3]`) das imagens reais, eliminando shifts.
+4. **Code Splitting com TanStack Router**: Rotas secundárias (Checkout, Confirmação, Perfil, Carteiras) divididas em chunks assíncronos (`lazyRouteComponent`), reduzindo o bundle principal de 592 kB para 179 kB.
+5. **Acessibilidade Plena (100% de Conformidade)**: Contraste auditado conforme WCAG 2.1 AA (> 5,5:1), hierarquia de títulos sequencial estrita (`h1` -> `h2` -> `h3` -> `h4`) e alvos de toque ergonômicos.
+
+### Como Reproduzir a Auditoria
+```bash
+# 1. Gerar o build de produção otimizado
+npm run build
+
+# 2. Executar as 12 medições automatizadas
+npm run audit:lighthouse
+```
+
+---
 
 Feito com foco em qualidade de engenharia, acessibilidade e atenção a cada detalhe visual.

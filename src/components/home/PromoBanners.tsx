@@ -3,15 +3,20 @@ import { Link } from '@tanstack/react-router'
 
 export const PromoBanners: React.FC = () => {
   return (
-    <section className="py-8 font-mono">
+    <section aria-label="Lançamentos Especiais" className="py-8 font-mono">
+      <h2 className="sr-only">Lançamentos em Destaque</h2>
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Banner 1: Genesis Edition matching user reference */}
           <div className="bg-[#241612] border border-[#3d271f] rounded-2xl sm:rounded-3xl p-5 sm:p-6 flex flex-row items-center gap-5 sm:gap-6 shadow-xl">
             <div className="w-28 sm:w-44 aspect-square rounded-2xl overflow-hidden bg-[#ded7cb] border border-[#3d271f] shrink-0">
               <img
-                src="/assets/nfts/banner_genesis_portrait.png"
+                src="/assets/nfts/banner_genesis_portrait.webp"
                 alt="Lançamentos gênesis de edição limitada"
+                loading="lazy"
+                decoding="async"
+                width={176}
+                height={176}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -39,8 +44,12 @@ export const PromoBanners: React.FC = () => {
           <div className="bg-[#241612] border border-[#3d271f] rounded-2xl sm:rounded-3xl p-5 sm:p-6 flex flex-row items-center gap-5 sm:gap-6 shadow-xl">
             <div className="w-28 sm:w-44 aspect-square rounded-2xl overflow-hidden bg-[#ded7cb] border border-[#3d271f] shrink-0">
               <img
-                src="/assets/nfts/banner_digital_art_portrait.png"
+                src="/assets/nfts/banner_digital_art_portrait.webp"
                 alt="Arte digital selecionada e muito mais"
+                loading="lazy"
+                decoding="async"
+                width={176}
+                height={176}
                 className="w-full h-full object-cover"
               />
             </div>

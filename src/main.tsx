@@ -7,10 +7,10 @@ async function prepareApp() {
   if (typeof window !== 'undefined') {
     const { worker } = await import('./mocks/browser')
     await worker.start({
-      onUnhandledFrame: 'bypass',
       serviceWorker: {
         url: '/mockServiceWorker.js',
       },
+      quiet: true,
     })
   }
 }

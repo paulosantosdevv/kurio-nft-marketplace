@@ -85,9 +85,9 @@ export const ScenarioBar: React.FC = () => {
         aria-label="Alternar painel de cenários de teste"
         className="bg-[#241914] hover:bg-[#2e201a] text-[#d28a4c] border border-[#d28a4c]/40 rounded-full px-3 py-1.5 shadow-lg text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer"
       >
-        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-        <span>MSW: {scenariosList.find((s) => s.id === scenario)?.label.split(' ')[0]}</span>
-        {isOpen ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronUp className="w-3.5 h-3.5" />}
+        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
+        <span aria-hidden="true">MSW: {scenariosList.find((s) => s.id === scenario)?.label.split(' ')[0]}</span>
+        {isOpen ? <ChevronDown className="w-3.5 h-3.5" aria-hidden="true" /> : <ChevronUp className="w-3.5 h-3.5" aria-hidden="true" />}
       </button>
     </aside>
   )

@@ -54,45 +54,48 @@ export const NFTFilters: React.FC<NFTFiltersProps> = ({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-mono">
       {/* Box 1: Filters Box */}
-      <div className="bg-[#241612] border border-[#3d271f] rounded-2xl p-5 text-xs text-[#8a7b70]">
+      <div className="bg-[#241612] border border-[#3d271f] rounded-2xl p-5 text-xs text-[#dcd1c4]">
         {/* Coleções */}
         <div>
-          <h4 className="text-xs font-bold text-[#f5efe6] uppercase tracking-wider mb-3.5">
+          <h3 className="text-xs font-bold text-[#f5efe6] uppercase tracking-wider mb-3.5">
             Coleções
-          </h4>
+          </h3>
           <div className="space-y-2">
             {categories.map((cat) => {
               const isSelected = currentCategory === cat.id
               return (
                 <button
                   key={cat.id}
-                  onClick={() => updateSearch({ category: isSelected ? undefined : cat.id })}
-                  className={`w-full flex items-center justify-between text-left py-0.5 hover:text-[#f5efe6] transition-colors cursor-pointer ${
-                    isSelected ? 'text-[#d28a4c] font-semibold' : 'text-[#8a7b70]'
-                  }`}
+                  onClick={() => updateSearch({ category: cat.id })}
+                  className="w-full flex items-center justify-between text-xs py-1 transition-colors cursor-pointer group"
                 >
-                  <span>{cat.label}</span>
-                  <span className="text-[11px] text-[#5e5148]">({cat.count})</span>
+                  <span className={isSelected ? 'text-[#f5efe6] font-bold' : 'text-[#dcd1c4] group-hover:text-[#f5efe6]'}>
+                    {cat.label}
+                  </span>
+                  <span className="text-[11px] text-[#a69a8f]">
+                    ({cat.count})
+                  </span>
                 </button>
               )
             })}
           </div>
         </div>
 
-        {/* Faixa de Preço */}
+        {/* Faixa de preço */}
         <div className="pt-5 mt-5 border-t border-[#241712]">
-          <h4 className="text-xs font-bold text-[#f5efe6] uppercase tracking-wider mb-1.5">
+          <h3 className="text-xs font-bold text-[#f5efe6] uppercase tracking-wider mb-2">
             Faixa de preço
-          </h4>
-          <span className="text-[11px] text-[#8a7b70] block mb-2.5">
+          </h3>
+          <span className="text-[11px] text-[#a69a8f] block mb-2.5">
             Preço: 0,02 - {sliderVal.toFixed(2)} ETH
           </span>
 
           <form onSubmit={handleApplyPrice} className="space-y-3">
             <input
               type="range"
+              aria-label="Faixa de preço em ETH"
               min="0.1"
               max="15.0"
               step="0.1"
@@ -102,7 +105,7 @@ export const NFTFilters: React.FC<NFTFiltersProps> = ({
             />
             <button
               type="submit"
-              className="bg-[#d28a4c] hover:bg-[#b87438] text-white text-[11px] font-bold px-4 py-1.5 rounded-md uppercase tracking-wider transition-colors cursor-pointer"
+              className="bg-[#d28a4c] hover:bg-[#b87438] text-[#140d0a] text-[11px] font-bold px-4 py-1.5 rounded-md uppercase tracking-wider transition-colors cursor-pointer"
             >
               Aplicar
             </button>
@@ -111,9 +114,9 @@ export const NFTFilters: React.FC<NFTFiltersProps> = ({
 
         {/* Rede */}
         <div className="pt-5 mt-5 border-t border-[#241712]">
-          <h4 className="text-xs font-bold text-[#f5efe6] uppercase tracking-wider mb-3">
+          <h3 className="text-xs font-bold text-[#f5efe6] uppercase tracking-wider mb-3">
             Rede
-          </h4>
+          </h3>
           <div className="space-y-2.5">
             {networks.map((net) => {
               const isSelected = currentNetwork === net.id
@@ -131,7 +134,7 @@ export const NFTFilters: React.FC<NFTFiltersProps> = ({
                     onClick={() => updateSearch({ network: net.id })}
                     className="accent-[#d28a4c]"
                   />
-                  <span className={isSelected ? 'text-[#f5efe6] font-medium' : 'text-[#8a7b70]'}>
+                  <span className={isSelected ? 'text-[#f5efe6] font-medium' : 'text-[#dcd1c4]'}>
                     {net.label} ({net.count})
                   </span>
                 </label>
@@ -142,11 +145,11 @@ export const NFTFilters: React.FC<NFTFiltersProps> = ({
       </div>
 
       {/* Box 2: NFT em Destaque — Oferta Limitada */}
-      <div className="bg-[#241612] border border-[#3d271f] rounded-2xl p-4 text-xs">
-        <h4 className="text-xs font-bold text-[#d28a4c] tracking-wider uppercase">
+      <div className="bg-[#241612] border border-[#3d271f] rounded-2xl p-4 text-xs font-mono">
+        <h3 className="text-xs font-bold text-[#d28a4c] tracking-wider uppercase">
           NFT EM DESTAQUE
-        </h4>
-        <p className="text-[10px] text-[#8a7b70] tracking-wider uppercase mb-3">
+        </h3>
+        <p className="text-[10px] text-[#b5a79b] tracking-wider uppercase mb-3">
           OFERTA LIMITADA
         </p>
 
@@ -156,8 +159,12 @@ export const NFTFilters: React.FC<NFTFiltersProps> = ({
           className="block rounded-xl overflow-hidden aspect-square bg-[#ded7cb] border border-[#3d271f] hover:opacity-95 transition-opacity"
         >
           <img
-            src="/assets/nfts/sidebar_nft.png"
+            src="/assets/nfts/sidebar_nft.webp"
             alt="Sage Nomad — NFT em Destaque"
+            loading="lazy"
+            decoding="async"
+            width={240}
+            height={240}
             className="w-full h-full object-cover"
           />
         </Link>

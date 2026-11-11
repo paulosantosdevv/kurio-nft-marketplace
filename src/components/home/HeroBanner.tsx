@@ -18,10 +18,10 @@ export const HeroBanner: React.FC = () => {
               <span className="text-[10px] text-[#a69a8f] font-mono block">
                 Bem-vindo à Kurio
               </span>
-              <h2 className="text-lg font-black text-[#f7f4ed] leading-tight font-mono">
+              <p className="text-lg font-black text-[#f7f4ed] leading-tight font-mono">
                 SEJA DONO DO FUTURO <br />DA ARTE DIGITAL
-              </h2>
-              <p className="text-[10px] text-[#8a7b70] leading-relaxed font-mono">
+              </p>
+              <p className="text-[10px] text-[#a69a8f] leading-relaxed font-mono">
                 Descubra NFTs selecionados de criadores do mundo todo.
               </p>
               <div className="pt-1">
@@ -39,15 +39,23 @@ export const HeroBanner: React.FC = () => {
             <div className="relative w-32 shrink-0">
               <div className="aspect-square rounded-2xl overflow-hidden bg-[#ded7cb] border border-[#2d1e17] shadow-lg">
                 <img
-                  src="/assets/nfts/card_1_emerald_ape.png"
+                  src="/assets/nfts/card_1_emerald_ape.webp"
                   alt="Emerald Ape #042"
+                  fetchPriority="high"
+                  decoding="async"
+                  width={128}
+                  height={128}
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="absolute -bottom-2 -left-2 w-10 h-10 rounded-xl overflow-hidden bg-[#ded7cb] border-2 border-[#1c1410] shadow-md">
                 <img
-                  src="/assets/nfts/card_2_sage_nomad.png"
+                  src="/assets/nfts/card_2_sage_nomad.webp"
                   alt="Sage Nomad"
+                  loading="lazy"
+                  decoding="async"
+                  width={40}
+                  height={40}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -67,7 +75,7 @@ export const HeroBanner: React.FC = () => {
           <div className="grid grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left Column: Text & CTA */}
             <div className="col-span-7 space-y-6">
-              <p className="text-xs text-[#8a7b70] font-mono tracking-wider">
+              <p className="text-xs text-[#a69a8f] font-mono tracking-wider">
                 Bem-vindo à Kurio
               </p>
 
@@ -75,7 +83,7 @@ export const HeroBanner: React.FC = () => {
                 SEJA DONO DO FUTURO <br />DA ARTE DIGITAL
               </h1>
 
-              <p className="text-xs sm:text-sm text-[#8a7b70] max-w-lg leading-relaxed font-mono">
+              <p className="text-xs sm:text-sm text-[#a69a8f] max-w-lg leading-relaxed font-mono">
                 Descubra NFTs selecionados de criadores emergentes e consagrados. Colecione arte digital rara, apoie artistas e tenha uma parte da cultura da internet.
               </p>
 
@@ -93,8 +101,12 @@ export const HeroBanner: React.FC = () => {
             <div className="col-span-5 flex justify-end">
               <div className="relative w-full max-w-[460px] aspect-square rounded-[32px] overflow-hidden shadow-2xl border border-[#3d271f] bg-[#ded7cb]">
                 <img
-                  src="/assets/nfts/hero_character.png"
+                  src="/assets/nfts/hero_character.webp"
                   alt="Emerald Ape NFT em destaque — Kurio"
+                  fetchPriority="high"
+                  decoding="async"
+                  width={460}
+                  height={460}
                   className="w-full h-full object-cover"
                 />
               </div>

@@ -14,6 +14,7 @@ export const Footer: React.FC = () => {
 
   return (
     <footer className="w-full bg-[#140d0a] pt-12 pb-8 mt-16 text-xs font-mono">
+      <h2 className="sr-only">Informações Institucionais e Rodapé</h2>
       {/* Unified Footer Card matching user reference and Figma */}
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-[#241612] border border-[#3d271f] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl">
@@ -25,8 +26,8 @@ export const Footer: React.FC = () => {
                 <div className="w-10 h-10 rounded-full bg-[#d28a4c] text-[#140d0a] font-black flex items-center justify-center text-sm">
                   W
                 </div>
-                <h4 className="font-bold text-[#f7f4ed] text-xs">Segurança da carteira</h4>
-                <p className="text-[11px] leading-relaxed text-[#8a7b70]">
+                <h3 className="font-bold text-[#f7f4ed] text-xs">Segurança da carteira</h3>
+                <p className="text-[11px] leading-relaxed text-[#a69a8f]">
                   Proteja sua carteira e colecione arte digital verificada com confiança.
                 </p>
               </div>
@@ -36,8 +37,8 @@ export const Footer: React.FC = () => {
                 <div className="w-10 h-10 rounded-full bg-[#d28a4c] text-[#140d0a] font-black flex items-center justify-center text-sm">
                   C
                 </div>
-                <h4 className="font-bold text-[#f7f4ed] text-xs">Criadores em destaque</h4>
-                <p className="text-[11px] leading-relaxed text-[#8a7b70]">
+                <h3 className="font-bold text-[#f7f4ed] text-xs">Criadores em destaque</h3>
+                <p className="text-[11px] leading-relaxed text-[#a69a8f]">
                   Conheça artistas, estúdios e comunidades que moldam a cultura digital na rede.
                 </p>
               </div>
@@ -47,15 +48,15 @@ export const Footer: React.FC = () => {
                 <div className="w-10 h-10 rounded-full bg-[#d28a4c] text-[#140d0a] font-black flex items-center justify-center text-sm">
                   D
                 </div>
-                <h4 className="font-bold text-[#f7f4ed] text-xs">Alertas de lançamentos</h4>
-                <p className="text-[11px] leading-relaxed text-[#8a7b70]">
+                <h3 className="font-bold text-[#f7f4ed] text-xs">Alertas de lançamentos</h3>
+                <p className="text-[11px] leading-relaxed text-[#a69a8f]">
                   Receba calendários de cunhagem, novidades de listas de acesso e análises do mercado.
                 </p>
               </div>
 
               {/* Box 4: Newsletter */}
               <div className="lg:pl-6 space-y-3">
-                <h4 className="font-bold text-[#f7f4ed] text-xs">Antecipe-se ao próximo lançamento</h4>
+                <h3 className="font-bold text-[#f7f4ed] text-xs">Antecipe-se ao próximo lançamento</h3>
                 {subscribed ? (
                   <span className="text-[11px] text-emerald-400 block pt-1">
                     E-mail cadastrado com sucesso!
@@ -64,7 +65,9 @@ export const Footer: React.FC = () => {
                   <div className="flex gap-2 pt-1">
                     <input
                       type="email"
+                      id="newsletter_email"
                       name="newsletter_email"
+                      aria-label="Digite seu e-mail para receber novidades"
                       placeholder="digite seu e-mail..."
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -75,18 +78,19 @@ export const Footer: React.FC = () => {
                         }
                       }}
                       required
-                      className="flex-1 bg-[#1a0f0d] text-[#f7f4ed] border border-[#3d271f] rounded-lg px-3 py-2 text-[11px] focus:outline-none focus:border-[#d28a4c] placeholder-[#6e5d52]"
+                      className="flex-1 bg-[#1a0f0d] text-[#f7f4ed] border border-[#3d271f] rounded-lg px-3 py-2 text-[11px] focus:outline-none focus:border-[#d28a4c] placeholder-[#a69a8f]"
                     />
                     <button
                       type="button"
                       onClick={() => handleSubscribe()}
+                      aria-label="Enviar inscrição na newsletter"
                       className="bg-[#d28a4c] hover:bg-[#c37c3e] text-[#140d0a] px-4 py-2 rounded-lg text-[11px] font-bold transition-colors cursor-pointer"
                     >
                       Enviar
                     </button>
                   </div>
                 )}
-                <p className="text-[10px] leading-relaxed text-[#8a7b70]">
+                <p className="text-[10px] leading-relaxed text-[#a69a8f]">
                   Receba lançamentos selecionados, histórias de criadores e novidades do mercado.
                 </p>
               </div>
@@ -110,45 +114,45 @@ export const Footer: React.FC = () => {
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-[11px]">
               {/* Column 1: Meu perfil */}
               <div>
-                <h5 className="font-bold text-[#f7f4ed] mb-3 uppercase tracking-wider text-[11px]">Meu perfil</h5>
-                <ul className="space-y-2 text-[#8a7b70]">
-                  <li><Link to="/perfil" className="hover:text-[#f7f4ed]">Meu perfil</Link></li>
-                  <li><span className="hover:text-[#f7f4ed] cursor-pointer">Minha coleção</span></li>
-                  <li><span className="hover:text-[#f7f4ed] cursor-pointer">Atividade</span></li>
-                  <li><span className="hover:text-[#f7f4ed] cursor-pointer">Estúdio do criador</span></li>
-                  <li><span className="hover:text-[#f7f4ed] cursor-pointer">Lista de interesse</span></li>
+                <h4 className="font-bold text-[#f7f4ed] mb-3 uppercase tracking-wider text-[11px]">Meu perfil</h4>
+                <ul className="space-y-1 text-[#a69a8f]">
+                  <li><Link to="/perfil" className="hover:text-[#f7f4ed] inline-block py-1">Meu perfil</Link></li>
+                  <li><span className="hover:text-[#f7f4ed] cursor-pointer inline-block py-1">Minha coleção</span></li>
+                  <li><span className="hover:text-[#f7f4ed] cursor-pointer inline-block py-1">Atividade</span></li>
+                  <li><span className="hover:text-[#f7f4ed] cursor-pointer inline-block py-1">Estúdio do criador</span></li>
+                  <li><span className="hover:text-[#f7f4ed] cursor-pointer inline-block py-1">Lista de interesse</span></li>
                 </ul>
               </div>
 
               {/* Column 2: Central de ajuda */}
               <div>
-                <h5 className="font-bold text-[#f7f4ed] mb-3 uppercase tracking-wider text-[11px]">Central de ajuda</h5>
-                <ul className="space-y-2 text-[#8a7b70]">
-                  <li><span className="hover:text-[#f7f4ed] cursor-pointer">Central de ajuda</span></li>
-                  <li><span className="hover:text-[#f7f4ed] cursor-pointer">Como comprar NFTs</span></li>
-                  <li><span className="hover:text-[#f7f4ed] cursor-pointer">Carteira e segurança</span></li>
-                  <li><span className="hover:text-[#f7f4ed] cursor-pointer">Política do mercado</span></li>
-                  <li><span className="hover:text-[#f7f4ed] cursor-pointer">Denunciar item</span></li>
+                <h4 className="font-bold text-[#f7f4ed] mb-3 uppercase tracking-wider text-[11px]">Central de ajuda</h4>
+                <ul className="space-y-1 text-[#a69a8f]">
+                  <li><span className="hover:text-[#f7f4ed] cursor-pointer inline-block py-1">Central de ajuda</span></li>
+                  <li><span className="hover:text-[#f7f4ed] cursor-pointer inline-block py-1">Como comprar NFTs</span></li>
+                  <li><span className="hover:text-[#f7f4ed] cursor-pointer inline-block py-1">Carteira e segurança</span></li>
+                  <li><span className="hover:text-[#f7f4ed] cursor-pointer inline-block py-1">Política do mercado</span></li>
+                  <li><span className="hover:text-[#f7f4ed] cursor-pointer inline-block py-1">Denunciar item</span></li>
                 </ul>
               </div>
 
               {/* Column 3: Coleções */}
               <div>
-                <h5 className="font-bold text-[#f7f4ed] mb-3 uppercase tracking-wider text-[11px]">Coleções</h5>
-                <ul className="space-y-2 text-[#8a7b70]">
-                  <li><Link to="/" search={{ category: 'arte-digital', page: 1 }} className="hover:text-[#f7f4ed]">Arte digital</Link></li>
-                  <li><Link to="/" search={{ category: 'fotografia', page: 1 }} className="hover:text-[#f7f4ed]">Fotografia</Link></li>
-                  <li><Link to="/" search={{ category: 'musica', page: 1 }} className="hover:text-[#f7f4ed]">Música</Link></li>
-                  <li><Link to="/" search={{ category: 'arte-3d', page: 1 }} className="hover:text-[#f7f4ed]">Arte 3D</Link></li>
-                  <li><Link to="/" search={{ category: 'utilidade', page: 1 }} className="hover:text-[#f7f4ed]">Utilidade</Link></li>
+                <h4 className="font-bold text-[#f7f4ed] mb-3 uppercase tracking-wider text-[11px]">Coleções</h4>
+                <ul className="space-y-1 text-[#a69a8f]">
+                  <li><Link to="/" search={{ category: 'arte-digital', page: 1 }} className="hover:text-[#f7f4ed] inline-block py-1">Arte digital</Link></li>
+                  <li><Link to="/" search={{ category: 'fotografia', page: 1 }} className="hover:text-[#f7f4ed] inline-block py-1">Fotografia</Link></li>
+                  <li><Link to="/" search={{ category: 'musica', page: 1 }} className="hover:text-[#f7f4ed] inline-block py-1">Música</Link></li>
+                  <li><Link to="/" search={{ category: 'arte-3d', page: 1 }} className="hover:text-[#f7f4ed] inline-block py-1">Arte 3D</Link></li>
+                  <li><Link to="/" search={{ category: 'utilidade', page: 1 }} className="hover:text-[#f7f4ed] inline-block py-1">Utilidade</Link></li>
                 </ul>
               </div>
 
               {/* Column 4: Redes sociais & Carteiras compatíveis */}
               <div className="space-y-5">
                 <div>
-                  <h5 className="font-bold text-[#f7f4ed] mb-2 uppercase tracking-wider text-[11px]">Redes sociais</h5>
-                  <div className="flex items-center gap-2 text-[#8a7b70]">
+                  <h4 className="font-bold text-[#f7f4ed] mb-2 uppercase tracking-wider text-[11px]">Redes sociais</h4>
+                  <div className="flex items-center gap-2 text-[#a69a8f]">
                     <a
                       href="#facebook"
                       className="w-7 h-7 rounded border border-[#3d271f] flex items-center justify-center hover:border-[#d28a4c] hover:text-[#d28a4c] transition-colors"
@@ -198,7 +202,7 @@ export const Footer: React.FC = () => {
                 </div>
 
                 <div>
-                  <h5 className="font-bold text-[#f7f4ed] mb-2 uppercase tracking-wider text-[11px]">Carteiras compatíveis</h5>
+                  <h4 className="font-bold text-[#f7f4ed] mb-2 uppercase tracking-wider text-[11px]">Carteiras compatíveis</h4>
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#3d271f] bg-[#1a0f0d] text-[10px] font-bold text-[#d28a4c] tracking-wider uppercase font-mono">
                     <span>METAMASK</span>
                     <span>·</span>
@@ -213,7 +217,7 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Copyright */}
-        <div className="pt-6 pb-2 text-center text-[#6e5d52] text-[11px]">
+        <div className="pt-6 pb-2 text-center text-[#a69a8f] text-[11px]">
           © 2026 Kurio. Propriedade digital para todos.
         </div>
       </div>

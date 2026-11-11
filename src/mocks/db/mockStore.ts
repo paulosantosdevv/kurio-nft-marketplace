@@ -4,7 +4,7 @@ import { UserProfile } from '../../types/auth'
 import { Order } from '../../types/order'
 import { Wallet } from '../../types/wallet'
 
-const STORAGE_KEY = 'kurio_mock_db_v3'
+const STORAGE_KEY = 'kurio_mock_db_v4'
 
 export interface MockDatabase {
   users: Array<UserProfile & { passwordHash: string }>
@@ -68,7 +68,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     edition: '1/50',
     totalEditions: 50,
     availableEditions: 19,
-    imageUrl: '/assets/nfts/card_1_emerald_ape.png',
+    imageUrl: '.webp',
     contractAddress: '0x7A4289B842F81203A293E918239019E8',
     standard: 'ERC-721',
     ipfsHash: 'ipfs://QmZ8F91B...42EmeraldApe',
@@ -98,7 +98,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     edition: '1/30',
     totalEditions: 30,
     availableEditions: 7,
-    imageUrl: '/assets/nfts/card_2_sage_nomad.png',
+    imageUrl: '.webp',
     contractAddress: '0x589A8192837190283A918239019E80589',
     standard: 'ERC-721',
     ipfsHash: 'ipfs://QmS589...Nomad',
@@ -129,7 +129,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     edition: '1/20',
     totalEditions: 20,
     availableEditions: 5,
-    imageUrl: '/assets/nfts/card_3_neon_vessel.png',
+    imageUrl: '.webp',
     contractAddress: '0x552F8192837190283A918239019E80552',
     standard: 'ERC-721',
     ipfsHash: 'ipfs://QmV552...Vessel',
@@ -159,7 +159,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     edition: '01/10',
     totalEditions: 10,
     availableEditions: 4,
-    imageUrl: '/assets/nfts/card_4_cosmic_bloom.png',
+    imageUrl: '.webp',
     contractAddress: '0x3D1182A1B8C92130F92837190283A118',
     standard: 'ERC-721',
     ipfsHash: 'ipfs://QmC118...Bloom',
@@ -189,7 +189,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     edition: '1/25',
     totalEditions: 25,
     availableEditions: 8,
-    imageUrl: '/assets/nfts/card_5_violet_nomad.png',
+    imageUrl: '.webp',
     contractAddress: '0x8B3141F90238C198273901A832B10314',
     standard: 'ERC-721',
     ipfsHash: 'ipfs://QmV314...Nomad',
@@ -219,7 +219,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     edition: '1/15',
     totalEditions: 15,
     availableEditions: 2,
-    imageUrl: '/assets/nfts/card_6_ivory_baron.png',
+    imageUrl: '.webp',
     contractAddress: '0x9E888127391BCA829371029381A00888',
     standard: 'ERC-721',
     ipfsHash: 'ipfs://QmI888...Baron',
@@ -249,7 +249,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     edition: 'ABERTA',
     totalEditions: 100,
     availableEditions: 63,
-    imageUrl: '/assets/nfts/card_7_golden_beat_1.png',
+    imageUrl: '.webp',
     contractAddress: '0x287B9C18273910A92837190283A10287',
     standard: 'ERC-1155',
     ipfsHash: 'ipfs://QmG287...Beat',
@@ -279,7 +279,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     edition: 'ABERTA',
     totalEditions: 100,
     availableEditions: 51,
-    imageUrl: '/assets/nfts/card_8_golden_beat_2.png',
+    imageUrl: '.webp',
     contractAddress: '0x288B9C18273910A92837190283A10288',
     standard: 'ERC-1155',
     ipfsHash: 'ipfs://QmG288...Beat',
@@ -309,7 +309,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     edition: '1/100',
     totalEditions: 100,
     availableEditions: 42,
-    imageUrl: '/assets/nfts/card_9_golden_signal.png',
+    imageUrl: '.webp',
     contractAddress: '0x160C8192837190283A918239019E80160',
     standard: 'ERC-721',
     ipfsHash: 'ipfs://QmS160...Signal',

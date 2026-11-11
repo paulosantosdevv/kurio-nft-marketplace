@@ -3,6 +3,7 @@ import {
   createRoute,
   createRouter,
   Outlet,
+  lazyRouteComponent,
 } from '@tanstack/react-router'
 import { Header } from '../components/layout/Header'
 import { Footer } from '../components/layout/Footer'
@@ -11,13 +12,14 @@ import { CartDrawer } from '../components/cart/CartDrawer'
 import { ScenarioBar } from '../components/layout/ScenarioBar'
 import { HomeView } from '../views/HomeView'
 import { NFTDetailView } from '../views/NFTDetailView'
-import { CartView } from '../views/CartView'
-import { CheckoutView } from '../views/CheckoutView'
-import { OrderConfirmationView } from '../views/OrderConfirmationView'
-import { LoginView } from '../views/LoginView'
-import { RegisterView } from '../views/RegisterView'
-import { ProfileView } from '../views/ProfileView'
-import { WalletsView } from '../views/WalletsView'
+
+const CartView = lazyRouteComponent(() => import('../views/CartView'), 'CartView')
+const CheckoutView = lazyRouteComponent(() => import('../views/CheckoutView'), 'CheckoutView')
+const OrderConfirmationView = lazyRouteComponent(() => import('../views/OrderConfirmationView'), 'OrderConfirmationView')
+const LoginView = lazyRouteComponent(() => import('../views/LoginView'), 'LoginView')
+const RegisterView = lazyRouteComponent(() => import('../views/RegisterView'), 'RegisterView')
+const ProfileView = lazyRouteComponent(() => import('../views/ProfileView'), 'ProfileView')
+const WalletsView = lazyRouteComponent(() => import('../views/WalletsView'), 'WalletsView')
 
 // Root Route
 const rootRoute = createRootRoute({

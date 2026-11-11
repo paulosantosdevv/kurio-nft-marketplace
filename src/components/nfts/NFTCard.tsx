@@ -21,6 +21,9 @@ export const NFTCard: React.FC<NFTCardProps> = ({ nft }) => {
           src={nft.imageUrl}
           alt={nft.title}
           loading="lazy"
+          decoding="async"
+          width={320}
+          height={320}
           className="w-full h-full object-cover"
         />
 
@@ -50,7 +53,7 @@ export const NFTCard: React.FC<NFTCardProps> = ({ nft }) => {
             {nft.price} ETH
           </span>
           {nft.originalPrice && (
-            <span className="text-xs text-[#6e5d52] line-through">
+            <span className="text-xs text-[#a69a8f] line-through">
               {nft.originalPrice} ETH
             </span>
           )}
