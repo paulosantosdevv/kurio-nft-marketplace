@@ -110,7 +110,7 @@ export const Header: React.FC = () => {
                 className="flex items-center gap-2 p-1 rounded-full hover:bg-[#1c1410] transition-colors cursor-pointer"
               >
                 <img
-                  src={user.avatarUrl || '/assets/nfts/card_1_emerald_ape.png'}
+                  src={user.avatarUrl || '/assets/nfts/card_1_emerald_ape.webp'}
                   alt={user.displayName}
                   className="w-8 h-8 rounded-full object-cover border border-[#d28a4c]"
                 />
