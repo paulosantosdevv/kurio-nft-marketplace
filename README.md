@@ -1,122 +1,233 @@
-# Kurio — Marketplace de NFTs
+# Kurio — Marketplace de NFTs | Desafio Frontend
 
-Implementação completa do marketplace de NFTs **Kurio** em **React 19** e **TypeScript**, baseada no layout do Figma com fidelidade visual para Desktop e Mobile.
+[![TypeScript](https://img.shields.io/badge/TypeScript-7.0-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-19.3-61dafb?logo=react)](https://react.dev/)
+[![TanStack Router](https://img.shields.io/badge/TanStack_Router-1.170-ff4154)](https://tanstack.com/router)
+[![TanStack Query](https://img.shields.io/badge/TanStack_Query-5.107-ff4154)](https://tanstack.com/query)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.3-38bdf8?logo=tailwindcss)](https://tailwindcss.com/)
+[![Playwright Tests](https://img.shields.io/badge/Playwright_E2E-32%2F32_Passed-success?logo=playwright)](https://playwright.dev/)
 
-A aplicação utiliza arquitetura orientada a contratos, roteamento com sincronização de URL, gerenciamento de estado assíncrono com TanStack Query, camada de mocks via MSW com cenários determinísticos de falha, eventos em tempo real com Socket.IO e suíte de testes E2E com Playwright.
+Implementação completa e orientada a contratos do marketplace de arte digital **Kurio**, desenvolvida com **React 19**, **TypeScript** e **Tailwind CSS v4**, seguindo estritamente os layouts do Figma para visualizações Desktop (1440px) e Mobile (414px/390px).
+
+A aplicação conta com arquitetura modular, estado de navegação com sincronização de URL, chamadas REST mockadas no nível de rede com **Mock Service Worker (MSW)**, simulação de eventos em tempo real com **Socket.IO**, proteção contra cliques duplicados via **Idempotency-Key** e suíte completa de **32 testes E2E automatizados** com Playwright.
+
+---
+
+## 📋 Sumário
+- [Destaques Técnicos](#-destaques-técnicos)
+- [Quick Start](#-quick-start)
+- [Credenciais e Dados de Teste](#-credenciais-e-dados-de-teste)
+- [Simulação de Cenários de Rede e Falhas (MSW)](#-simulação-de-cenários-de-rede-e-falhas-msw)
+- [Testes Automatizados (Playwright E2E)](#-testes-automatizados-playwright-e2e)
+- [Estrutura do Projeto](#-estrutura-do-projeto)
+- [Como Subir no GitHub](#-como-subir-no-github)
+- [Como Colocar no Ar (Deploy)](#-como-colocar-no-ar-deploy)
+- [Decisões Arquiteturais](#-decisões-arquiteturais)
+
+---
+
+## ⚡ Destaques Técnicos
+
+1. **Fidelidade Visual Pixel-Perfect**:
+   - Layouts Desktop e Mobile fiéis às referências do Figma (cores, tipografia mono, bordas quentes `#3d271f`, cards `#241612`, proporções de imagem e espaçamentos).
+   - Componentes responsivos fluidos: Navbar com indicador ativo, Hero com artes exclusivas, Banners promocionais com alinhamento à direita, Diário de Cunhagem com 4 artigos e Rodapé unificado em container contínuo.
+
+2. **Roteamento & Sincronização de URL (TanStack Router)**:
+   - Filtros do catálogo (`search`, `category`, `priceMin`, `priceMax`, `network`, `sortBy`, `page`) refletidos na URL Search Params com schema tipado.
+   - Histórico de navegação nativo (botões Voltar/Avançar preservam o estado da listagem sem recarregar a tela).
+   - Proteção de rotas privadas (`/pagamento`, `/perfil`, `/carteiras`) com redirecionamento para `/login?redirect=...` e retorno automático após autenticação.
+
+3. **Gerenciamento de Estado Remoto & Cache (TanStack Query)**:
+   - Cache otimizado com `staleTime`, deduplicação de requisições e isolamento de cache por usuário.
+   - Atualizações otimistas na ação de favoritar NFTs com rollback automático em caso de falha de rede.
+
+4. **Idempotência no Checkout**:
+   - Requisições para `POST /api/orders` utilizam cabeçalho `Idempotency-Key` persistido por sessão.
+   - Previne compras duplicadas e cobranças acidentais em caso de duplo clique ou perda transitória de conexão.
+
+5. **Tempo Real com Socket.IO & Version Guard Rails**:
+   - Eventos `nft.updated` para sincronização dinâmica de preços e edições disponíveis.
+   - Reconciliação em tempo real no carrinho e checkout com alerta visual caso o valor de um item selecionado sofra alteração.
+   - Descarte determinístico de eventos obsoletos através de contador de versão monotônico (`version`).
 
 ---
 
 ## 🚀 Quick Start
 
 ### Pré-requisitos
-* Node.js >= 20.x
-* npm >= 10.x
+* **Node.js** >= 20.x
+* **npm** >= 10.x
 
-### Instalação
+### 1. Clonar e Instalar Dependências
 ```bash
-# Instalar dependências
+git clone <URL_DO_REPOSITORIO>
+cd kurio-nft-marketplace
 npm install
 ```
 
-### Executar em Desenvolvimento
+### 2. Rodar em Modo de Desenvolvimento
 ```bash
 npm run dev
 ```
-Acesse `http://localhost:5173`. O Mock Service Worker (MSW) é inicializado automaticamente no navegador.
+Abra o navegador em [http://localhost:5173](http://localhost:5173). O Mock Service Worker (MSW) será registrado automaticamente para interceptar as requisições de API no navegador.
 
-### Build e Preview de Produção
+### 3. Build de Produção e Preview
 ```bash
+# Validação de tipos TypeScript e build do Vite
 npm run build
+
+# Pré-visualização do bundle gerado
 npm run preview
 ```
 
 ---
 
-## 🔑 Credenciais Fictícias e Dados de Teste
+## 🔑 Credenciais e Dados de Teste
 
-Para avaliação dos fluxos autenticados, estão disponíveis as seguintes contas de teste no banco mock:
+Para navegar e validar todos os fluxos autenticados, utilize as contas pré-configuradas no banco mock:
 
-| Usuário | E-mail | Senha | Perfil |
+| Usuário | E-mail | Senha | Função / Dados Pré-carregados |
 | :--- | :--- | :--- | :--- |
-| **Nova Sato** | `contato@email.com` | `password123` | Colecionador principal com carteiras e favoritos pré-configurados |
+| **Nova Sato** | `contato@email.com` | `password123` | Colecionador principal com carteiras conectadas e favoritos |
 | **Alex Rivers** | `alex@email.com` | `password123` | Colecionador secundário para teste de isolamento de sessão |
 
-### Cupons Promocionais Cadastrados
-* `KURIO10`: 10% de desconto no subtotal (ativo)
-* `LAUNCH20`: 20% de desconto no subtotal (ativo)
-* `EXPIRED50`: Simulação de cupom expirado
+### Cupons Promocionais Disponíveis:
+* `KURIO10`: Aplica **10% de desconto** no subtotal da compra (Ativo).
+* `LAUNCH20`: Aplica **20% de desconto** no subtotal da compra (Ativo).
+* `EXPIRED50`: Simula cupom expirado/inválido com retorno de erro amigável.
 
 ---
 
-## 🕹️ Testando Cenários de Falha e Tempo Real (Painel de Avaliação)
+## 🕹️ Simulação de Cenários de Rede e Falhas (MSW)
 
-No canto inferior direito da tela, há um **painel flutuante de simulação** que permite reproduzir diretamente os cenários descritos no enunciado:
+No canto inferior direito da tela, há um **painel flutuante de avaliação** que permite acionar em tempo real os cenários de contingência solicitados no desafio:
 
-1. **Rede Lenta (`slow_network`)**: Adiciona 2200ms de latência artificial para observar os skeletons com animação shimmer.
-2. **Erro 500 no Servidor (`server_error`)**: Força respostas HTTP 500 no catálogo e mutations para testar telas de erro e botões de retry.
-3. **Sessão Expirada (`session_expired`)**: Retorna HTTP 401 durante navegação ou checkout, exercitando o redirecionamento com preservação do contexto.
-4. **Preço Alterado no Checkout (`price_surge`)**: Simula variação de cotação do ativo antes do envio da ordem, exigindo revalidação do usuário.
-5. **Edição Esgotada (`stock_out`)**: Simula concorrência onde as edições restantes se esgotam no momento do pagamento.
-6. **Timeout no Pedido (`payment_timeout`)**: Simula atraso na resposta da criação do pedido para demonstrar a recuperação pela mesma `Idempotency-Key`.
-7. **Pagamento Recusado (`payment_rejected`)**: Simula rejeição de pagamento pela rede blockchain.
-8. **Disparar `nft.updated` (Socket.IO)**: Dispara um evento de tempo real alterando o preço do *Emerald Ape* de 1.19 ETH para 1.89 ETH.
-9. **Restaurar Banco Mock**: Restaura o estado inicial limpo do banco de dados em `localStorage`.
+1. **Rede Lenta (`slow_network`)**: Injeta latência artificial de 2200ms nas respostas da API para observar o comportamento dos skeletons com animação shimmer.
+2. **Erro 500 no Servidor (`server_error`)**: Força respostas HTTP 500 para validar as telas de erro amigáveis e botões de nova tentativa (*retry*).
+3. **Sessão Expirada (`session_expired`)**: Retorna HTTP 401 durante navegação ou checkout, testando o redirecionamento com preservação de rota de retorno.
+4. **Preço Alterado no Checkout (`price_surge`)**: Simula variação de cotação do ativo durante a finalização do pedido, exigindo confirmação explícita do usuário.
+5. **Edição Esgotada (`stock_out`)**: Simula concorrência onde as edições do NFT se esgotam no momento do pagamento.
+6. **Timeout no Pedido (`payment_timeout`)**: Simula timeout na resposta da ordem, demonstrando a recuperação idempotente pela mesma `Idempotency-Key`.
+7. **Pagamento Recusado (`payment_rejected`)**: Simula rejeição da transação pela rede blockchain.
+8. **Disparar `nft.updated` (Socket.IO)**: Dispara um evento de tempo real alterando o preço do *Emerald Ape #842* (de 1.19 ETH para 1.89 ETH) com reconciliação imediata na interface.
+9. **Restaurar Banco Mock**: Reseta o estado do `localStorage` para o padrão inicial limpo.
+
+> **Nota**: No mobile, o botão do painel se posiciona automaticamente acima da barra de navegação inferior (`MobileBottomNav`), sem obstruir menus ou botões fixos de ação.
 
 ---
 
-## 🧪 Testes E2E com Playwright
+## 🧪 Testes Automatizados (Playwright E2E)
 
-A suíte cobre os cenários obrigatórios do desafio (busca, filtros compostos, detalhes, 404, cadastro, login, persistência de carrinho, checkout idempotente, atualizações via socket e gerenciamento de carteiras):
+A aplicação conta com uma suíte completa de **32 testes automatizados** cobrindo todos os fluxos críticos de ponta a ponta, executados tanto no perfil **Desktop** (1440x900) quanto no **Mobile** (Pixel 5 / 390x844):
 
 ```bash
-# Executar todos os testes E2E
+# Executar todos os 32 testes E2E em modo headless
 npm run test:e2e
 
-# Executar com interface gráfica interativa
+# Executar com a interface gráfica interativa do Playwright
 npm run test:e2e:ui
 
-# Visualizar o relatório HTML dos testes
+# Exibir o relatório visual HTML após a execução
 npm run test:e2e:report
 ```
 
+### Escopo dos Testes:
+* **Catálogo, Filtros e Busca**: Carregamento da grade 3x3, busca por texto, filtros de categoria, faixa de preço por slider e filtros por rede blockchain com persistência no histórico (`catalog.spec.ts`).
+* **Detalhes do NFT e Tratamento de Erros**: Carregamento dinâmico de metadados, cálculo de quantidade, atualização de favoritos e página 404 para identificador inexistente (`nft-detail.spec.ts`).
+* **Carrinho, Cupons e Persistência**: Adição de múltiplos itens, drawer/página de carrinho, validação de cupons promocionais e persistência após recarregamento da página (`cart.spec.ts`).
+* **Autenticação, Checkout Idempotente e Confirmação**: Cadastro com bloqueio de e-mail duplicado, login com redirecionamento inteligente, checkout com proteção contra duplo clique e recibo completo com snapshot (`auth-checkout.spec.ts`).
+* **Tempo Real com Socket.IO**: Atualização de preço via socket durante a navegação e alerta de reconciliação com bloqueio de avanço caso o preço mude no carrinho (`realtime-socket.spec.ts`).
+* **Perfil do Colecionador e Carteiras**: Edição de dados cadastrais, adição de nova carteira e alternância de carteira primária/secundária (`profile-wallets.spec.ts`).
+
 ---
 
-## 📊 Auditoria de Performance e Qualidade (Lighthouse)
+## 📁 Estrutura do Projeto
 
-Metas estabelecidas e auditadas:
-* **Performance**: >= 90
-* **Accessibility**: >= 95
-* **Best Practices**: >= 95
-* **SEO**: >= 90
-
-Para rodar uma auditoria local:
-```bash
-npm run build
-npm run preview -- --port 4173
-npx lighthouse http://localhost:4173 --output html --output-path ./reports/lighthouse/home-desktop.html --preset=desktop --chrome-flags="--headless"
+```
+kurio-nft-marketplace/
+├── e2e/                           # Suíte de testes ponta a ponta (Playwright)
+│   ├── auth-checkout.spec.ts
+│   ├── cart.spec.ts
+│   ├── catalog.spec.ts
+│   ├── nft-detail.spec.ts
+│   ├── profile-wallets.spec.ts
+│   └── realtime-socket.spec.ts
+├── public/
+│   ├── assets/nfts/               # Imagens e artes originais dos personagens
+│   └── mockServiceWorker.js       # Service worker do MSW
+├── src/
+│   ├── api/                       # Clientes HTTP e contratos tipados (Axios)
+│   ├── components/
+│   │   ├── cart/                  # Drawer e itens do carrinho
+│   │   ├── home/                  # HeroBanner, PromoBanners, MintDiary
+│   │   ├── layout/                # Header, Footer, ScenarioBar, MobileBottomNav
+│   │   ├── nfts/                  # NFTCard, NFTGrid, NFTFilters
+│   │   └── ui/                    # Componentes base (Button, Input, Skeleton)
+│   ├── context/                   # Contextos globais (Auth, Cart, Scenario)
+│   ├── mocks/                     # Handlers MSW, fixtures e mock store
+│   │   ├── db/mockStore.ts        # Banco mock em memória/localStorage
+│   │   ├── handlers/              # Endpoints mockados (auth, nfts, cart, orders)
+│   │   └── scenarios.ts           # Definição dos cenários de teste
+│   ├── routes/                    # Configuração de rotas (TanStack Router)
+│   ├── socket/                    # Serviço e listener de eventos Socket.IO
+│   ├── types/                     # Interfaces TypeScript (NFT, User, Order, Wallet)
+│   └── views/                     # Páginas da aplicação (Home, NFTDetail, Cart, Checkout, etc.)
+├── ARCHITECTURE.md                # Detalhamento arquitetural completo
+├── package.json
+├── playwright.config.ts           # Configuração de viewports e projetos Playwright
+└── vite.config.ts
 ```
 
 ---
 
-## 🌐 Deploy em Produção
+## 📤 Como Subir no GitHub
 
-O projeto está otimizado para deploy em plataformas de borda (Vercel, Netlify ou Cloudflare Pages):
+Para publicar o projeto em seu repositório pessoal no GitHub:
 
-### Vercel
-1. Conecte o repositório no dashboard da [Vercel](https://vercel.com).
-2. Framework Preset: **Vite**.
-3. Build Command: `npm run build`
-4. Output Directory: `dist`
+1. **Crie um repositório vazio** no GitHub (ex: `kurio-nft-marketplace`).
+2. No terminal do projeto, execute os comandos:
 
-### Netlify
-O build gera a pasta `dist` estática com service worker incluído.
+```bash
+# 1. Renomear o branch atual para main (padrão do GitHub)
+git branch -M main
+
+# 2. Vincular o repositório remoto (substitua pelo seu usuário e repositório)
+git remote add origin https://github.com/<SEU_USUARIO>/kurio-nft-marketplace.git
+
+# 3. Enviar o código com o histórico de commits
+git push -u origin main
+```
 
 ---
 
-## 📚 Documentação Adicional
+## 🌐 Como Colocar no Ar (Deploy)
 
-Consulte o arquivo [`ARCHITECTURE.md`](./ARCHITECTURE.md) para detalhes aprofundados sobre:
-* Contratos REST e schemas de dados;
-* Política de versionamento e deduplicação de eventos do Socket.IO;
-* Estratégia de cache do TanStack Query e rollback otimista;
-* Garantias de idempotência contra cliques duplicados no checkout.
+O projeto é uma Single Page Application (SPA) estática de alta performance gerada pelo Vite, compatível com qualquer provedor de hospedagem estática:
+
+### Opção 1: Vercel (Recomendado — 1 minuto)
+1. Instale a CLI da Vercel ou conecte o repositório diretamente no painel [vercel.com](https://vercel.com):
+   ```bash
+   npx vercel
+   ```
+2. Defina as opções de configuração:
+   * **Framework Preset**: `Vite`
+   * **Build Command**: `npm run build`
+   * **Output Directory**: `dist`
+3. O deploy será gerado instantaneamente com suporte total ao Service Worker do MSW.
+
+### Opção 2: Netlify
+1. Pelo terminal com a Netlify CLI:
+   ```bash
+   npx netlify deploy --build --prod
+   ```
+2. Diretório de publicação: `dist`.
+
+---
+
+## 📐 Decisões Arquiteturais
+
+Para uma análise detalhada sobre modelagem de dados, tratamento de concorrência, idempotência e políticas de cache, consulte o documento [`ARCHITECTURE.md`](./ARCHITECTURE.md).
+
+---
+
+Feito com foco em qualidade de engenharia, acessibilidade e atenção a cada detalhe visual.
