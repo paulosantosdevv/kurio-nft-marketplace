@@ -6,10 +6,12 @@ import {
 } from '@tanstack/react-router'
 import { Header } from '../components/layout/Header'
 import { Footer } from '../components/layout/Footer'
+import { MobileBottomNav } from '../components/layout/MobileBottomNav'
 import { CartDrawer } from '../components/cart/CartDrawer'
 import { ScenarioBar } from '../components/layout/ScenarioBar'
 import { HomeView } from '../views/HomeView'
 import { NFTDetailView } from '../views/NFTDetailView'
+import { CartView } from '../views/CartView'
 import { CheckoutView } from '../views/CheckoutView'
 import { OrderConfirmationView } from '../views/OrderConfirmationView'
 import { LoginView } from '../views/LoginView'
@@ -20,13 +22,14 @@ import { WalletsView } from '../views/WalletsView'
 // Root Route
 const rootRoute = createRootRoute({
   component: () => (
-    <div className="min-h-screen flex flex-col bg-[#140d0a] text-[#f7f4ed]">
+    <div className="min-h-screen flex flex-col bg-[#140d0a] text-[#f7f4ed] overflow-x-hidden w-full max-w-full">
       <Header />
       <CartDrawer />
-      <main className="flex-1">
+      <main className="flex-1 w-full max-w-full overflow-x-hidden pb-16 md:pb-0">
         <Outlet />
       </main>
       <Footer />
+      <MobileBottomNav />
       <ScenarioBar />
     </div>
   ),
@@ -72,6 +75,13 @@ const nftDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/nft/$id',
   component: NFTDetailView,
+})
+
+// Dedicated Cart Route
+const cartRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/carrinho',
+  component: CartView,
 })
 
 // Checkout Route
@@ -129,6 +139,7 @@ const walletsRoute = createRoute({
 const routeTree = rootRoute.addChildren([
   indexRoute,
   nftDetailRoute,
+  cartRoute,
   checkoutRoute,
   confirmationRoute,
   loginRoute,

@@ -1,6 +1,7 @@
 import { http, HttpResponse, delay } from 'msw'
 import { mockStore } from '../db/mockStore'
 import { scenarioManager } from '../scenarios'
+import { getUserIdFromRequest } from './authHelper'
 
 export const authHandlers = [
   // Session check
@@ -11,15 +12,11 @@ export const authHandlers = [
       return HttpResponse.json({ message: 'Sessão expirada. Faça login novamente.' }, { status: 401 })
     }
 
-    const authHeader = request.headers.get('Authorization')
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const userId = getUserIdFromRequest(request)
+    if (!userId) {
       return HttpResponse.json({ user: null })
     }
 
-    const token = authHeader.replace('Bearer ', '')
-    // token format: `tok_<userId>_timestamp`
-    const parts = token.split('_')
-    const userId = parts[1]
     const user = mockStore.findUserById(userId)
 
     if (!user) {

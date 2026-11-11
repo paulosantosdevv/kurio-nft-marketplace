@@ -34,8 +34,11 @@ export const ScenarioProvider: React.FC<{ children: ReactNode }> = ({ children }
   }
 
   const simulateSocketPriceChange = () => {
-    // Dynamically change Emerald Ape price from 1.19 to 1.89
-    socketService.simulateNFTPriceChange('nft-1', '1.89')
+    const nft = mockStore.getNFTById('nft-1')
+    const currentPrice = nft?.price || '1.19'
+    // If already 1.89, change to 2.49 so it is guaranteed to change; otherwise change to 1.89
+    const targetPrice = currentPrice === '1.89' ? '2.49' : '1.89'
+    socketService.simulateNFTPriceChange('nft-1', targetPrice)
     queryClient.invalidateQueries({ queryKey: ['nfts'] })
     queryClient.invalidateQueries({ queryKey: ['nft', 'nft-1'] })
     queryClient.invalidateQueries({ queryKey: ['cart'] })

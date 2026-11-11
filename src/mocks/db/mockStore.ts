@@ -4,7 +4,7 @@ import { UserProfile } from '../../types/auth'
 import { Order } from '../../types/order'
 import { Wallet } from '../../types/wallet'
 
-const STORAGE_KEY = 'kurio_mock_db_v2'
+const STORAGE_KEY = 'kurio_mock_db_v3'
 
 export interface MockDatabase {
   users: Array<UserProfile & { passwordHash: string }>
@@ -61,7 +61,7 @@ const DEFAULT_NFTS: NFTItem[] = [
       royaltyPercentage: 5,
     },
     description:
-      'Emerald Ape #842 é uma obra digital finalizada à mão da coleção Kurio Editions. Cada atributo fica armazenado nos metadados do token e verificado na Ethereum. A obra explora identidade, movimento e luz em um mundo digital sem fronteiras.',
+      'Emerald Ape #842 é uma obra digital finalizada à mão da coleção Kurio Editions. Cada atributo fica armazenado nos metadados do token e verificado na Ethereum.',
     price: '1.19',
     category: 'arte-digital',
     network: 'ethereum',
@@ -76,7 +76,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     favoritesCount: 142,
     rating: 4.9,
     reviewsCount: 19,
-    createdAt: '2024-05-10T12:00:00Z',
+    createdAt: '2024-05-20T12:00:00Z',
     version: 1,
   },
   {
@@ -106,7 +106,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     favoritesCount: 174,
     rating: 4.9,
     reviewsCount: 22,
-    createdAt: '2024-05-11T16:45:00Z',
+    createdAt: '2024-05-19T16:45:00Z',
     version: 1,
   },
   {
@@ -137,7 +137,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     favoritesCount: 205,
     rating: 4.8,
     reviewsCount: 31,
-    createdAt: '2024-05-12T20:30:00Z',
+    createdAt: '2024-05-18T20:30:00Z',
     version: 1,
   },
   {
@@ -167,7 +167,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     favoritesCount: 89,
     rating: 4.8,
     reviewsCount: 12,
-    createdAt: '2024-05-13T09:00:00Z',
+    createdAt: '2024-05-17T09:00:00Z',
     version: 1,
   },
   {
@@ -197,7 +197,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     favoritesCount: 230,
     rating: 5.0,
     reviewsCount: 34,
-    createdAt: '2024-05-14T15:20:00Z',
+    createdAt: '2024-05-16T15:20:00Z',
     version: 1,
   },
   {
@@ -257,7 +257,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     favoritesCount: 95,
     rating: 4.7,
     reviewsCount: 16,
-    createdAt: '2024-05-16T11:00:00Z',
+    createdAt: '2024-05-14T11:00:00Z',
     version: 1,
   },
   {
@@ -287,7 +287,7 @@ const DEFAULT_NFTS: NFTItem[] = [
     favoritesCount: 88,
     rating: 4.7,
     reviewsCount: 11,
-    createdAt: '2024-05-17T13:00:00Z',
+    createdAt: '2024-05-13T13:00:00Z',
     version: 1,
   },
   {
@@ -310,14 +310,14 @@ const DEFAULT_NFTS: NFTItem[] = [
     totalEditions: 100,
     availableEditions: 42,
     imageUrl: '/assets/nfts/card_9_golden_signal.png',
-    contractAddress: '0x160C819283719283A918239019E80160',
+    contractAddress: '0x160C8192837190283A918239019E80160',
     standard: 'ERC-721',
     ipfsHash: 'ipfs://QmS160...Signal',
     isFavorite: false,
     favoritesCount: 68,
     rating: 4.6,
     reviewsCount: 9,
-    createdAt: '2024-05-18T14:10:00Z',
+    createdAt: '2024-05-12T14:10:00Z',
     version: 1,
   },
 ]

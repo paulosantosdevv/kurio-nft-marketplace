@@ -3,27 +3,27 @@
 @layer base {
   :root {
     --bg-primary: #140d0a;
-    --bg-surface: #1a110d;
-    --bg-surface-elevated: #241914;
+    --bg-surface: #1e130e;
+    --bg-surface-elevated: #241612;
     --border-subtle: #2d1c15;
     --border-medium: #3d281e;
     --accent-amber: #d28a4c;
-    --accent-amber-hover: #b87438;
-    --text-primary: #f5efe6;
-    --text-secondary: #8a7b70;
-    --text-muted: #5e5148;
+    --accent-amber-hover: #e59a58;
+    --text-primary: #f7f4ed;
+    --text-secondary: #a59a90;
+    --text-muted: #73675e;
   }
 
   body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Space Mono', monospace;
     min-height: 100vh;
     overflow-x: hidden;
   }
 
-  h1, h2, h3, .font-heading {
-    font-family: 'Chakra Petch', sans-serif;
+  h1, h2, h3, h4, h5, h6, .font-heading, button, input, select, textarea {
+    font-family: 'Space Mono', monospace;
   }
 
   *:focus-visible {

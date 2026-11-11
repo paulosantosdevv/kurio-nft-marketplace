@@ -1,18 +1,11 @@
 import { http, HttpResponse, delay } from 'msw'
 import { mockStore } from '../db/mockStore'
-
-function getUserId(request: Request): string | null {
-  const auth = request.headers.get('Authorization')
-  if (auth && auth.startsWith('Bearer ')) {
-    return auth.replace('Bearer ', '').split('_')[1] || null
-  }
-  return null
-}
+import { getUserIdFromRequest } from './authHelper'
 
 export const profileHandlers = [
   http.get('/api/profile', async ({ request }) => {
     await delay(100)
-    const userId = getUserId(request)
+    const userId = getUserIdFromRequest(request)
     if (!userId) {
       return HttpResponse.json({ message: 'Não autorizado.' }, { status: 401 })
     }
@@ -28,7 +21,7 @@ export const profileHandlers = [
 
   http.patch('/api/profile', async ({ request }) => {
     await delay(150)
-    const userId = getUserId(request)
+    const userId = getUserIdFromRequest(request)
     if (!userId) {
       return HttpResponse.json({ message: 'Não autorizado.' }, { status: 401 })
     }
@@ -46,7 +39,7 @@ export const profileHandlers = [
 
   http.post('/api/profile/password', async ({ request }) => {
     await delay(200)
-    const userId = getUserId(request)
+    const userId = getUserIdFromRequest(request)
     if (!userId) {
       return HttpResponse.json({ message: 'Não autorizado.' }, { status: 401 })
     }

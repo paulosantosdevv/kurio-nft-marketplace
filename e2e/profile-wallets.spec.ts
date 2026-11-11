@@ -4,9 +4,10 @@ test.describe('6. Perfil do Colecionador e Gestão de Carteiras', () => {
   test.beforeEach(async ({ page }) => {
     // Autenticar
     await page.goto('/login')
-    await page.locator('input[type="email"]').fill('contato@email.com')
-    await page.locator('input[type="password"]').fill('password123')
-    await page.getByRole('button', { name: 'Entrar' }).click()
+    await page.locator('form input[type="email"]').first().fill('contato@email.com')
+    await page.locator('form input[type="password"]').first().fill('password123')
+    await page.locator('form button[type="submit"]').click()
+    await page.waitForURL((url) => !url.pathname.includes('/login'))
   })
 
   test('deve editar e persistir dados cadastrais do perfil', async ({ page }) => {

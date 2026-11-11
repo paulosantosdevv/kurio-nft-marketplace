@@ -5,9 +5,9 @@ test.describe('2. Detalhes do NFT e Tratamento de Erros', () => {
     await page.goto('/nft/nft-1')
 
     await expect(page.locator('h1')).toContainText('Emerald Ape #842')
-    await expect(page.getByText('1.19 ETH')).toBeVisible()
-    await expect(page.getByText('Nova Sato')).toBeVisible()
-    await expect(page.getByText('ERC-721')).toBeVisible()
+    await expect(page.getByText('1.19 ETH').first()).toBeVisible()
+    await expect(page.getByText('Nova Sato', { exact: true })).toBeVisible()
+    await expect(page.getByText('ERC-721').first()).toBeVisible()
   })
 
   test('deve exibir mensagem clara de recurso inexistente (404) para NFT inválido', async ({ page }) => {

@@ -7,8 +7,8 @@ test.describe('1. Catálogo, Filtros e Navegação', () => {
 
   test('deve renderizar o catálogo inicial e os destaques', async ({ page }) => {
     await expect(page.locator('h1')).toContainText('SEJA DONO DO FUTURO DA ARTE DIGITAL')
-    await expect(page.getByText('Emerald Ape #842')).toBeVisible()
-    await expect(page.getByText('Cosmic Bloom #118')).toBeVisible()
+    await expect(page.locator('#catalogo').getByText('Emerald Ape #842')).toBeVisible()
+    await expect(page.locator('#catalogo').getByText('Cosmic Bloom #118')).toBeVisible()
   })
 
   test('deve filtrar por busca de texto e refletir na URL', async ({ page }) => {
@@ -17,13 +17,13 @@ test.describe('1. Catálogo, Filtros e Navegação', () => {
     await searchInput.press('Enter')
 
     await expect(page).toHaveURL(/search=Emerald/)
-    await expect(page.getByText('Emerald Ape #842')).toBeVisible()
-    await expect(page.getByText('Cosmic Bloom #118')).not.toBeVisible()
+    await expect(page.locator('#catalogo').getByText('Emerald Ape #842')).toBeVisible()
+    await expect(page.locator('#catalogo').getByText('Cosmic Bloom #118')).not.toBeVisible()
   })
 
   test('deve combinar filtros de categoria e rede mantendo o histórico de navegação', async ({ page }) => {
-    // Filtrar por categoria 'Arte digital'
-    await page.getByRole('button', { name: /Arte digital/i }).click()
+    // Filtrar por categoria 'Arte digital' no painel de filtros
+    await page.locator('#catalogo').getByRole('button', { name: /Arte digital/i }).click()
     await expect(page).toHaveURL(/category=arte-digital/)
 
     // Filtrar por rede 'Ethereum'
@@ -42,6 +42,6 @@ test.describe('1. Catálogo, Filtros e Navegação', () => {
     await expect(page).toHaveURL(/sortBy=price-asc/)
 
     // O item mais barato deve ser o primeiro listado
-    await expect(page.getByText('Golden Signal #160')).toBeVisible()
+    await expect(page.locator('#catalogo').getByText('Golden Signal #160')).toBeVisible()
   })
 })

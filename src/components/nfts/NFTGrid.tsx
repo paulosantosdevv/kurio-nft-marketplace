@@ -100,7 +100,7 @@ export const NFTGrid: React.FC<NFTGridProps> = ({
             Ordenar por:
           </label>
           <select
-            id="sort-select"
+            id="sort-by-select"
             value={sortBy}
             onChange={(e) => handleSortChange(e.target.value)}
             className="bg-transparent text-[#f5efe6] font-medium text-xs focus:outline-none cursor-pointer"
@@ -115,17 +115,17 @@ export const NFTGrid: React.FC<NFTGridProps> = ({
 
       {/* Loading Skeleton */}
       {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.from({ length: 9 }).map((_, idx) => (
-            <div key={idx} className="space-y-2">
-              <Skeleton className="w-full aspect-square rounded-2xl" />
+            <div key={idx} className="space-y-3">
+              <Skeleton className="w-full aspect-square rounded-[22px]" />
               <Skeleton className="h-4 w-3/4 rounded" />
               <Skeleton className="h-3 w-1/3 rounded" />
             </div>
           ))}
         </div>
       ) : isError ? (
-        <div className="min-h-72 flex flex-col items-center justify-center text-center p-8 bg-[#1a110d] border border-red-900/30 rounded-2xl">
+        <div className="min-h-72 flex flex-col items-center justify-center text-center p-8 bg-[#18120e] border border-red-900/30 rounded-2xl">
           <AlertCircle className="w-10 h-10 text-red-400 mb-3" />
           <h3 className="text-base font-bold text-[#f5efe6] mb-1">Falha na consulta</h3>
           <p className="text-xs text-[#8a7b70] max-w-sm mb-4">
@@ -133,32 +133,32 @@ export const NFTGrid: React.FC<NFTGridProps> = ({
           </p>
           <button
             onClick={() => refetch()}
-            className="bg-[#d28a4c] text-white text-xs font-semibold px-4 py-2 rounded-lg"
+            className="bg-[#d28a4c] text-white text-xs font-semibold px-4 py-2 rounded-lg cursor-pointer"
           >
             Tentar novamente
           </button>
         </div>
       ) : nfts.length === 0 ? (
-        <div className="min-h-72 flex flex-col items-center justify-center text-center p-8 bg-[#1a110d] border border-[#2d1c15] rounded-2xl">
+        <div className="min-h-72 flex flex-col items-center justify-center text-center p-8 bg-[#18120e] border border-[#2d1c15] rounded-2xl">
           <p className="text-sm font-semibold text-[#f5efe6] mb-1">Nenhum NFT encontrado</p>
           <p className="text-xs text-[#8a7b70] mb-4">Tente ajustar seus filtros de busca.</p>
           <button
             onClick={() => navigate({ to: '/', search: () => ({ page: 1 }) })}
-            className="text-xs text-[#d28a4c] underline"
+            className="text-xs text-[#d28a4c] underline cursor-pointer"
           >
             Limpar filtros
           </button>
         </div>
       ) : (
-        /* The 3x3 Card Grid */
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        /* The 3x3 Card Grid matching Figma */
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {nfts.map((nft) => (
             <NFTCard key={nft.id} nft={nft} />
           ))}
         </div>
       )}
 
-      {/* Pagination Numbers Matching Reference */}
+      {/* Pagination Numbers Matching Reference [1][2][3][4][>] */}
       <div className="flex items-center justify-end gap-1.5 pt-6">
         {[1, 2, 3, 4].map((p) => {
           const isCurrent = page === p

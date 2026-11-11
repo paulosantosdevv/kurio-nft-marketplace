@@ -2,20 +2,21 @@ import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { useAuth } from '../context/AuthContext'
 import { profileApi } from '../api/client'
-import { Button } from '../components/ui/Button'
-import { Input } from '../components/ui/Input'
 import {
   User,
-  Wallet,
-  Activity,
+  MapPin,
+  ShoppingCart,
   Heart,
-  Tag,
+  TrendingUp,
   Download,
-  HelpCircle,
+  AlertTriangle,
   LogOut,
+  ChevronDown,
+  Eye,
+  EyeOff,
+  Image as ImageIcon,
   CheckCircle2,
   AlertCircle,
-  Camera,
 } from 'lucide-react'
 
 export const ProfileView: React.FC = () => {
@@ -23,23 +24,24 @@ export const ProfileView: React.FC = () => {
   const navigate = useNavigate()
 
   const [displayName, setDisplayName] = useState('')
-  const [nickname, setNickname] = useState('')
+  const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [ensName, setEnsName] = useState('')
+  const [walletNickname, setWalletNickname] = useState('')
   const [avatarUrl, setAvatarUrl] = useState('')
 
-  // Password state
+  // Password fields
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [showCurrentPass, setShowCurrentPass] = useState(false)
+  const [showNewPass, setShowNewPass] = useState(false)
+  const [showConfirmPass, setShowConfirmPass] = useState(false)
 
-  // Feedback
+  // Status feedback
   const [profileSuccess, setProfileSuccess] = useState<string | null>(null)
   const [profileError, setProfileError] = useState<string | null>(null)
-  const [passwordSuccess, setPasswordSuccess] = useState<string | null>(null)
-  const [passwordError, setPasswordError] = useState<string | null>(null)
-  const [isSavingProfile, setIsSavingProfile] = useState(false)
-  const [isSavingPassword, setIsSavingPassword] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
@@ -49,11 +51,12 @@ export const ProfileView: React.FC = () => {
 
   useEffect(() => {
     if (user) {
-      setDisplayName(user.displayName || '')
-      setNickname(user.nickname || '')
-      setEmail(user.email || '')
-      setEnsName(user.ensName || '')
-      setAvatarUrl(user.avatarUrl || '/assets/avatars/default-avatar.png')
+      setDisplayName(user.displayName || 'Nova Sato')
+      setUsername(user.username || 'novasato')
+      setEmail(user.email || 'contato@email.com')
+      setEnsName(user.ensName || 'novasato.eth')
+      setWalletNickname(user.nickname || 'Main Vault')
+      setAvatarUrl(user.avatarUrl || '')
     }
   }, [user])
 
@@ -61,268 +64,325 @@ export const ProfileView: React.FC = () => {
     e.preventDefault()
     setProfileError(null)
     setProfileSuccess(null)
-    setIsSavingProfile(true)
+    setIsSaving(true)
 
     try {
       await profileApi.updateProfile({
         displayName,
-        nickname,
+        username,
         email,
         ensName,
+        nickname: walletNickname,
         avatarUrl,
       })
+
+      // If new password provided
+      if (newPassword) {
+        if (newPassword !== confirmPassword) {
+          throw new Error('As senhas não coincidem.')
+        }
+        await profileApi.changePassword({ currentPassword, newPassword })
+      }
+
       await refreshUser()
       setProfileSuccess('Dados cadastrais salvos com sucesso!')
-      setTimeout(() => setProfileSuccess(null), 3500)
+      setTimeout(() => setProfileSuccess(null), 4000)
     } catch (err: any) {
-      setProfileError(err.response?.data?.message || 'Falha ao atualizar dados do perfil.')
+      setProfileError(err.message || err.response?.data?.message || 'Falha ao atualizar dados.')
     } finally {
-      setIsSavingProfile(false)
+      setIsSaving(false)
     }
   }
 
-  const handleChangePassword = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setPasswordError(null)
-    setPasswordSuccess(null)
-
-    if (newPassword !== confirmPassword) {
-      setPasswordError('As senhas digitadas não coincidem.')
-      return
-    }
-
-    if (newPassword.length < 6) {
-      setPasswordError('A nova senha deve ter no mínimo 6 caracteres.')
-      return
-    }
-
-    setIsSavingPassword(true)
-
-    try {
-      await profileApi.changePassword({ currentPassword, newPassword })
-      setPasswordSuccess('Senha alterada com sucesso!')
-      setCurrentPassword('')
-      setNewPassword('')
-      setConfirmPassword('')
-      setTimeout(() => setPasswordSuccess(null), 3500)
-    } catch (err: any) {
-      setPasswordError(err.response?.data?.message || 'A senha atual está incorreta.')
-    } finally {
-      setIsSavingPassword(false)
-    }
+  const handleLogout = async () => {
+    await logout()
+    navigate({ to: '/' })
   }
 
   if (authLoading || !user) {
-    return <div className="p-20 text-center text-[#a69a8f]">Carregando perfil...</div>
+    return <div className="p-20 text-center font-mono text-[#a69a8f]">Carregando dados do perfil...</div>
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-        {/* Left Sidebar Menu */}
-        <aside className="md:col-span-4 lg:col-span-3 space-y-2">
-          <div className="p-4 bg-[#1b120e] border border-[#2d1e17] rounded-2xl mb-4 flex items-center gap-3">
-            <img
-              src={avatarUrl}
-              alt={displayName}
-              className="w-12 h-12 rounded-full object-cover border border-[#d28a4c]"
-            />
-            <div className="overflow-hidden">
-              <h3 className="font-bold text-[#f7f4ed] text-sm truncate">{displayName}</h3>
-              <p className="text-xs text-[#d28a4c] truncate">{ensName || email}</p>
-            </div>
-          </div>
+    <div className="min-h-screen bg-[#140d0a] text-[#f7f4ed]">
+      <div className="max-w-[1280px] mx-auto px-6 lg:px-8 py-10">
+        <div className="grid grid-cols-12 gap-10 items-start">
+          {/* Left Sidebar Menu matching Figma */}
+          <aside className="col-span-12 md:col-span-3 space-y-4">
+            <h2 className="text-base font-mono font-bold text-[#f7f4ed] tracking-wider px-3">
+              Meu perfil
+            </h2>
 
-          <nav className="space-y-1 text-xs">
-            <Link
-              to="/perfil"
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-[#241914] text-[#d28a4c] font-semibold border border-[#d28a4c]/30"
-            >
-              <User className="w-4 h-4" /> Dados do perfil
-            </Link>
-            <Link
-              to="/carteiras"
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[#1b120e] text-[#a69a8f] hover:text-[#f7f4ed] transition-colors"
-            >
-              <Wallet className="w-4 h-4" /> Carteiras
-            </Link>
-            <span className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[#786b62] cursor-not-allowed">
-              <Activity className="w-4 h-4" /> Atividade
-            </span>
-            <span className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[#786b62] cursor-not-allowed">
-              <Heart className="w-4 h-4" /> Lista de interesse
-            </span>
-            <span className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[#786b62] cursor-not-allowed">
-              <Tag className="w-4 h-4" /> Ofertas
-            </span>
-            <span className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[#786b62] cursor-not-allowed">
-              <Download className="w-4 h-4" /> Arquivos baixados
-            </span>
-            <span className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[#786b62] cursor-not-allowed">
-              <HelpCircle className="w-4 h-4" /> Suporte
-            </span>
-            <button
-              onClick={() => logout()}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-400 hover:bg-[#241914] hover:text-red-300 transition-colors text-left cursor-pointer"
-            >
-              <LogOut className="w-4 h-4" /> Sair da conta
-            </button>
-          </nav>
-        </aside>
+            <nav className="space-y-1 font-mono text-xs">
+              <Link
+                to="/perfil"
+                className="w-full flex items-center gap-3 px-3.5 py-3 border-l-2 border-[#d28a4c] bg-[#1a110d] text-[#f7f4ed] font-bold"
+              >
+                <User className="w-4 h-4 text-[#d28a4c]" />
+                <span>Dados do perfil</span>
+              </Link>
 
-        {/* Right Main Profile Content */}
-        <main className="md:col-span-8 lg:col-span-9 space-y-8">
-          <div className="bg-[#1b120e] border border-[#2d1e17] rounded-3xl p-6 sm:p-8 space-y-8">
-            <div>
-              <h2 className="text-xl font-black text-[#f7f4ed] tracking-tight">
-                Dados do Colecionador
-              </h2>
-              <p className="text-xs text-[#a69a8f] mt-1">
-                Atualize suas informações visíveis no mercado e identidade pública.
-              </p>
-            </div>
+              <Link
+                to="/carteiras"
+                className="w-full flex items-center gap-3 px-3.5 py-3 text-[#8a7b70] hover:text-[#f7f4ed] transition-colors"
+              >
+                <MapPin className="w-4 h-4" />
+                <span>Carteiras</span>
+              </Link>
 
-            {/* Avatar Section */}
-            <div className="flex items-center gap-6 pb-6 border-b border-[#2d1e17]">
-              <div className="relative">
-                <img
-                  src={avatarUrl}
-                  alt={displayName}
-                  className="w-20 h-20 rounded-full object-cover border-2 border-[#d28a4c]"
-                />
-                <label className="absolute bottom-0 right-0 p-1.5 bg-[#d28a4c] rounded-full text-white cursor-pointer hover:bg-[#b87438]">
-                  <Camera className="w-3.5 h-3.5" />
-                  <input
-                    type="file"
-                    className="hidden"
-                    accept="image/*"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0]
-                      if (file) {
-                        const fakeUrl = URL.createObjectURL(file)
-                        setAvatarUrl(fakeUrl)
-                      }
-                    }}
-                  />
-                </label>
+              <div className="w-full flex items-center gap-3 px-3.5 py-3 text-[#8a7b70] hover:text-[#f7f4ed] cursor-pointer">
+                <ShoppingCart className="w-4 h-4" />
+                <span>Atividade</span>
               </div>
-              <div className="space-y-1 text-xs">
-                <h4 className="font-bold text-[#f7f4ed]">Foto de Perfil</h4>
-                <p className="text-[#786b62]">JPG, PNG ou GIF. Máximo de 5MB.</p>
-                <div className="flex gap-2 pt-1">
+
+              <div className="w-full flex items-center gap-3 px-3.5 py-3 text-[#8a7b70] hover:text-[#f7f4ed] cursor-pointer">
+                <Heart className="w-4 h-4" />
+                <span>Lista de interesse</span>
+              </div>
+
+              <div className="w-full flex items-center gap-3 px-3.5 py-3 text-[#8a7b70] hover:text-[#f7f4ed] cursor-pointer">
+                <TrendingUp className="w-4 h-4" />
+                <span>Ofertas</span>
+              </div>
+
+              <div className="w-full flex items-center gap-3 px-3.5 py-3 text-[#8a7b70] hover:text-[#f7f4ed] cursor-pointer">
+                <Download className="w-4 h-4" />
+                <span>Arquivos baixados</span>
+              </div>
+
+              <div className="w-full flex items-center gap-3 px-3.5 py-3 text-[#8a7b70] hover:text-[#f7f4ed] cursor-pointer">
+                <AlertTriangle className="w-4 h-4" />
+                <span>Suporte</span>
+              </div>
+
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center gap-3 px-3.5 py-3 text-[#8a7b70] hover:text-red-400 transition-colors cursor-pointer text-left"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Sair</span>
+              </button>
+            </nav>
+          </aside>
+
+          {/* Right Column: Perfil do Colecionador Form */}
+          <main className="col-span-12 md:col-span-9 space-y-8 font-mono text-xs">
+            <div>
+              <h1 className="text-base font-mono font-bold text-[#f7f4ed] tracking-wider mb-6">
+                Perfil do colecionador
+              </h1>
+
+              <div className="flex items-center gap-3 p-4 bg-[#18110d] border border-[#2d1e17] rounded-2xl mb-6">
+                <div className="w-12 h-12 rounded-full overflow-hidden bg-[#ded7cb] border border-[#d28a4c] shrink-0">
+                  <img
+                    src={avatarUrl || '/assets/nfts/card_1_emerald_ape.png'}
+                    alt={displayName}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-[#f7f4ed]">{displayName}</h3>
+                  <p className="text-xs text-[#d28a4c]">{ensName || email}</p>
+                </div>
+              </div>
+
+              {profileSuccess && (
+                <div className="p-3 bg-emerald-950/40 border border-emerald-800/50 rounded-xl flex items-center gap-2 text-xs text-emerald-300 mb-6">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>{profileSuccess}</span>
+                </div>
+              )}
+
+              {profileError && (
+                <div className="p-3 bg-red-950/40 border border-red-800/50 rounded-xl flex items-center gap-2 text-xs text-red-300 mb-6">
+                  <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+                  <span>{profileError}</span>
+                </div>
+              )}
+
+              <form onSubmit={handleSaveProfile} className="space-y-8">
+                {/* 2-Column Personal Details Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5">
+                  {/* Row 1 */}
+                  <div>
+                    <label htmlFor="Nome de exibição" className="text-[#f7f4ed] block mb-2 font-mono">
+                      Nome de exibição<span className="text-[#d28a4c]">*</span>
+                    </label>
+                    <input
+                      id="Nome de exibição"
+                      type="text"
+                      value={displayName}
+                      onChange={(e) => setDisplayName(e.target.value)}
+                      className="w-full bg-[#18110d] border border-[#2d1e17] rounded-lg px-4 py-3 text-[#f7f4ed] focus:outline-none focus:border-[#d28a4c]"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="Nome de usuário" className="text-[#f7f4ed] block mb-2 font-mono">
+                      Nome de usuário<span className="text-[#d28a4c]">*</span>
+                    </label>
+                    <input
+                      id="Nome de usuário"
+                      type="text"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      className="w-full bg-[#18110d] border border-[#2d1e17] rounded-lg px-4 py-3 text-[#f7f4ed] focus:outline-none focus:border-[#d28a4c]"
+                    />
+                  </div>
+
+                  {/* Row 2 */}
+                  <div>
+                    <label htmlFor="E-mail" className="text-[#f7f4ed] block mb-2 font-mono">
+                      E-mail<span className="text-[#d28a4c]">*</span>
+                    </label>
+                    <input
+                      id="E-mail"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full bg-[#18110d] border border-[#2d1e17] rounded-lg px-4 py-3 text-[#f7f4ed] focus:outline-none focus:border-[#d28a4c]"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="Nome ENS" className="text-[#f7f4ed] block mb-2 font-mono">
+                      Nome ENS <span className="text-[#d28a4c]">*</span>
+                    </label>
+                    <div className="flex">
+                      <div className="bg-[#1c1410] border border-[#2d1e17] border-r-0 rounded-l-lg px-3 py-3 flex items-center gap-1 text-[#8a7b70]">
+                        <span>.eth</span>
+                        <ChevronDown className="w-3.5 h-3.5" />
+                      </div>
+                      <input
+                        id="Nome ENS"
+                        type="text"
+                        value={ensName}
+                        onChange={(e) => setEnsName(e.target.value)}
+                        className="flex-1 bg-[#18110d] border border-[#2d1e17] rounded-r-lg px-4 py-3 text-[#f7f4ed] focus:outline-none focus:border-[#d28a4c]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Row 3 */}
+                  <div>
+                    <label htmlFor="Apelido da carteira" className="text-[#f7f4ed] block mb-2 font-mono">
+                      Apelido da carteira<span className="text-[#d28a4c]">*</span>
+                    </label>
+                    <input
+                      id="Apelido da carteira"
+                      type="text"
+                      value={walletNickname}
+                      onChange={(e) => setWalletNickname(e.target.value)}
+                      className="w-full bg-[#18110d] border border-[#2d1e17] rounded-lg px-4 py-3 text-[#f7f4ed] focus:outline-none focus:border-[#d28a4c]"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[#f7f4ed] block mb-2 font-mono">Avatar</label>
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-full bg-[#1c1410] border border-[#2d1e17] flex items-center justify-center text-[#8a7b70] overflow-hidden">
+                        {avatarUrl ? (
+                          <img src={avatarUrl} alt={displayName} className="w-full h-full object-cover" />
+                        ) : (
+                          <ImageIcon className="w-5 h-5" />
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setAvatarUrl('/assets/nfts/card_1_emerald_ape.png')}
+                        className="bg-[#d28a4c] hover:bg-[#e0985a] text-[#140d0a] font-bold px-5 py-2 rounded-lg text-xs cursor-pointer transition-colors"
+                      >
+                        Alterar
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setAvatarUrl('')}
+                        className="text-xs text-[#8a7b70] hover:text-white transition-colors cursor-pointer"
+                      >
+                        Remover
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Alterar Senha Section */}
+                <div className="space-y-5 pt-6 border-t border-[#241712]">
+                  <h3 className="text-sm font-mono font-bold text-[#f7f4ed] tracking-wider">
+                    Alterar senha
+                  </h3>
+
+                  <div className="space-y-4 max-w-md">
+                    <div>
+                      <label className="text-[#8a7b70] block mb-1">Senha atual</label>
+                      <div className="relative">
+                        <input
+                          type={showCurrentPass ? 'text' : 'password'}
+                          value={currentPassword}
+                          onChange={(e) => setCurrentPassword(e.target.value)}
+                          className="w-full bg-[#18110d] border border-[#2d1e17] rounded-lg px-4 py-3 pr-10 text-[#f7f4ed] focus:outline-none focus:border-[#d28a4c]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowCurrentPass(!showCurrentPass)}
+                          className="absolute right-3 top-3.5 text-[#8a7b70] hover:text-[#f7f4ed]"
+                        >
+                          {showCurrentPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-[#8a7b70] block mb-1">Nova senha</label>
+                      <div className="relative">
+                        <input
+                          type={showNewPass ? 'text' : 'password'}
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                          className="w-full bg-[#18110d] border border-[#2d1e17] rounded-lg px-4 py-3 pr-10 text-[#f7f4ed] focus:outline-none focus:border-[#d28a4c]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowNewPass(!showNewPass)}
+                          className="absolute right-3 top-3.5 text-[#8a7b70] hover:text-[#f7f4ed]"
+                        >
+                          {showNewPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-[#8a7b70] block mb-1">Confirmar nova senha</label>
+                      <div className="relative">
+                        <input
+                          type={showConfirmPass ? 'text' : 'password'}
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          className="w-full bg-[#18110d] border border-[#2d1e17] rounded-lg px-4 py-3 pr-10 text-[#f7f4ed] focus:outline-none focus:border-[#d28a4c]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowConfirmPass(!showConfirmPass)}
+                          className="absolute right-3 top-3.5 text-[#8a7b70] hover:text-[#f7f4ed]"
+                        >
+                          {showConfirmPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Submit button */}
+                <div className="pt-2">
                   <button
-                    type="button"
-                    onClick={() => setAvatarUrl('/assets/avatars/default-avatar.png')}
-                    className="text-[11px] text-[#a69a8f] hover:text-red-400 cursor-pointer"
+                    type="submit"
+                    disabled={isSaving}
+                    aria-label="Salvar Alterações"
+                    className="bg-[#d28a4c] hover:bg-[#e0985a] text-[#140d0a] font-bold px-8 py-3 rounded-lg text-xs uppercase tracking-wider transition-colors cursor-pointer"
                   >
-                    Restaurar avatar padrão
+                    {isSaving ? 'Salvando...' : 'Salvar Alterações'}
                   </button>
                 </div>
-              </div>
-            </div>
-
-            {/* Feedback messages */}
-            {profileSuccess && (
-              <div className="p-3 bg-emerald-950/40 border border-emerald-800/50 rounded-xl flex items-center gap-2 text-xs text-emerald-300">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>{profileSuccess}</span>
-              </div>
-            )}
-            {profileError && (
-              <div className="p-3 bg-red-950/40 border border-red-800/50 rounded-xl flex items-center gap-2 text-xs text-red-300">
-                <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
-                <span>{profileError}</span>
-              </div>
-            )}
-
-            {/* Form */}
-            <form onSubmit={handleSaveProfile} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Input
-                  label="Nome de exibição"
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  required
-                />
-                <Input
-                  label="Apelido da carteira"
-                  value={nickname}
-                  onChange={(e) => setNickname(e.target.value)}
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Input
-                  label="E-mail"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-                <Input
-                  label="Nome ENS (.eth)"
-                  value={ensName}
-                  onChange={(e) => setEnsName(e.target.value)}
-                  placeholder="ex: seunome.eth"
-                />
-              </div>
-
-              <Button type="submit" size="md" isLoading={isSavingProfile}>
-                Salvar Alterações
-              </Button>
-            </form>
-
-            {/* Change Password Section */}
-            <div className="pt-8 border-t border-[#2d1e17] space-y-4">
-              <div>
-                <h3 className="text-base font-bold text-[#f7f4ed]">Alterar Senha</h3>
-                <p className="text-xs text-[#a69a8f]">
-                  Atualize sua senha de segurança para proteger seus ativos digitais.
-                </p>
-              </div>
-
-              {passwordSuccess && (
-                <div className="p-3 bg-emerald-950/40 border border-emerald-800/50 rounded-xl flex items-center gap-2 text-xs text-emerald-300">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>{passwordSuccess}</span>
-                </div>
-              )}
-              {passwordError && (
-                <div className="p-3 bg-red-950/40 border border-red-800/50 rounded-xl flex items-center gap-2 text-xs text-red-300">
-                  <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
-                  <span>{passwordError}</span>
-                </div>
-              )}
-
-              <form onSubmit={handleChangePassword} className="space-y-4 max-w-md">
-                <Input
-                  label="Senha atual"
-                  type="password"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  required
-                />
-                <Input
-                  label="Nova senha"
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  required
-                />
-                <Input
-                  label="Confirmar nova senha"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                />
-                <Button type="submit" variant="secondary" size="md" isLoading={isSavingPassword}>
-                  Atualizar Senha
-                </Button>
               </form>
             </div>
-          </div>
-        </main>
+          </main>
+        </div>
       </div>
     </div>
   )

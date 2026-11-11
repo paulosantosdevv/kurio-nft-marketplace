@@ -1,19 +1,12 @@
 import { http, HttpResponse, delay } from 'msw'
 import { mockStore } from '../db/mockStore'
 import { Wallet } from '../../types/wallet'
-
-function getUserId(request: Request): string | null {
-  const auth = request.headers.get('Authorization')
-  if (auth && auth.startsWith('Bearer ')) {
-    return auth.replace('Bearer ', '').split('_')[1] || null
-  }
-  return null
-}
+import { getUserIdFromRequest } from './authHelper'
 
 export const walletHandlers = [
   http.get('/api/wallets', async ({ request }) => {
     await delay(100)
-    const userId = getUserId(request)
+    const userId = getUserIdFromRequest(request)
     if (!userId) {
       return HttpResponse.json({ message: 'Não autorizado.' }, { status: 401 })
     }
@@ -24,7 +17,7 @@ export const walletHandlers = [
 
   http.post('/api/wallets', async ({ request }) => {
     await delay(150)
-    const userId = getUserId(request)
+    const userId = getUserIdFromRequest(request)
     if (!userId) {
       return HttpResponse.json({ message: 'Não autorizado.' }, { status: 401 })
     }
@@ -53,7 +46,7 @@ export const walletHandlers = [
 
   http.patch('/api/wallets/:id', async ({ params, request }) => {
     await delay(100)
-    const userId = getUserId(request)
+    const userId = getUserIdFromRequest(request)
     if (!userId) {
       return HttpResponse.json({ message: 'Não autorizado.' }, { status: 401 })
     }
@@ -71,7 +64,7 @@ export const walletHandlers = [
 
   http.delete('/api/wallets/:id', async ({ params, request }) => {
     await delay(100)
-    const userId = getUserId(request)
+    const userId = getUserIdFromRequest(request)
     if (!userId) {
       return HttpResponse.json({ message: 'Não autorizado.' }, { status: 401 })
     }

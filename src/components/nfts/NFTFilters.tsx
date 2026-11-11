@@ -11,7 +11,7 @@ export interface NFTFiltersProps {
 export const NFTFilters: React.FC<NFTFiltersProps> = ({
   currentCategory = 'todas',
   currentPriceMax = '12.38',
-  currentNetwork = 'ethereum',
+  currentNetwork,
 }) => {
   const navigate = useNavigate()
   const [sliderVal, setSliderVal] = useState(parseFloat(currentPriceMax) || 12.38)
@@ -56,13 +56,13 @@ export const NFTFilters: React.FC<NFTFiltersProps> = ({
   return (
     <div className="space-y-6">
       {/* Box 1: Filters Box */}
-      <div className="bg-[#1a110d] border border-[#2d1c15] rounded-2xl p-5 text-xs text-[#8a7b70]">
+      <div className="bg-[#18120e] border border-[#2d1c15] rounded-2xl p-5 text-xs text-[#8a7b70]">
         {/* Coleções */}
         <div>
-          <h4 className="text-xs font-bold text-[#f5efe6] uppercase tracking-wider mb-3">
+          <h4 className="text-xs font-bold text-[#f5efe6] uppercase tracking-wider mb-3.5">
             Coleções
           </h4>
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             {categories.map((cat) => {
               const isSelected = currentCategory === cat.id
               return (
@@ -83,10 +83,10 @@ export const NFTFilters: React.FC<NFTFiltersProps> = ({
 
         {/* Faixa de Preço */}
         <div className="pt-5 mt-5 border-t border-[#241712]">
-          <h4 className="text-xs font-bold text-[#f5efe6] uppercase tracking-wider mb-1">
+          <h4 className="text-xs font-bold text-[#f5efe6] uppercase tracking-wider mb-1.5">
             Faixa de preço
           </h4>
-          <span className="text-[11px] text-[#8a7b70] block mb-2">
+          <span className="text-[11px] text-[#8a7b70] block mb-2.5">
             Preço: 0,02 - {sliderVal.toFixed(2)} ETH
           </span>
 
@@ -111,16 +111,16 @@ export const NFTFilters: React.FC<NFTFiltersProps> = ({
 
         {/* Rede */}
         <div className="pt-5 mt-5 border-t border-[#241712]">
-          <h4 className="text-xs font-bold text-[#f5efe6] uppercase tracking-wider mb-2.5">
+          <h4 className="text-xs font-bold text-[#f5efe6] uppercase tracking-wider mb-3">
             Rede
           </h4>
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             {networks.map((net) => {
               const isSelected = currentNetwork === net.id
               return (
                 <label
                   key={net.id}
-                  className="flex items-center gap-2 text-xs hover:text-[#f5efe6] cursor-pointer"
+                  className="flex items-center gap-2.5 text-xs hover:text-[#f5efe6] cursor-pointer"
                 >
                   <input
                     type="radio"
@@ -128,6 +128,7 @@ export const NFTFilters: React.FC<NFTFiltersProps> = ({
                     value={net.id}
                     checked={isSelected}
                     onChange={() => updateSearch({ network: net.id })}
+                    onClick={() => updateSearch({ network: net.id })}
                     className="accent-[#d28a4c]"
                   />
                   <span className={isSelected ? 'text-[#f5efe6] font-medium' : 'text-[#8a7b70]'}>
@@ -140,20 +141,24 @@ export const NFTFilters: React.FC<NFTFiltersProps> = ({
         </div>
       </div>
 
-      {/* Box 2: NFT EM DESTAQUE - OFERTA LIMITADA */}
-      <div className="bg-[#1a110d] border border-[#2d1c15] rounded-2xl p-5">
-        <span className="text-[10px] font-bold text-[#d28a4c] uppercase tracking-widest block">
+      {/* Box 2: NFT em Destaque — Oferta Limitada */}
+      <div className="bg-[#18120e] border border-[#2d1c15] rounded-2xl p-4 text-xs">
+        <h4 className="text-xs font-bold text-[#d28a4c] tracking-wider uppercase">
           NFT EM DESTAQUE
-        </span>
-        <h4 className="text-xs font-bold text-[#f5efe6] uppercase tracking-wider mt-0.5 mb-3">
-          OFERTA LIMITADA
         </h4>
+        <p className="text-[10px] text-[#8a7b70] tracking-wider uppercase mb-3">
+          OFERTA LIMITADA
+        </p>
 
-        <Link to="/nft/$id" params={{ id: 'nft-2' }} className="block rounded-2xl overflow-hidden bg-[#ded7cb] shadow-md border border-[#2d1c15] hover:scale-[1.02] transition-transform">
+        <Link
+          to="/nft/$id"
+          params={{ id: 'nft-2' }}
+          className="block rounded-xl overflow-hidden aspect-square bg-[#ded7cb] border border-[#2d1c15] hover:opacity-95 transition-opacity"
+        >
           <img
             src="/assets/nfts/sidebar_nft.png"
-            alt="NFT em destaque na barra lateral"
-            className="w-full h-auto object-cover"
+            alt="Sage Nomad — NFT em Destaque"
+            className="w-full h-full object-cover"
           />
         </Link>
       </div>

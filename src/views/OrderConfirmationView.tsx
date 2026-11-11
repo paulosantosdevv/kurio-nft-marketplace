@@ -2,9 +2,8 @@ import React, { useState } from 'react'
 import { useParams, Link } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { ordersApi } from '../api/client'
-import { Button } from '../components/ui/Button'
 import { Skeleton } from '../components/ui/Skeleton'
-import { CheckCircle2, Copy, Check, ExternalLink, ArrowRight, AlertCircle } from 'lucide-react'
+import { X, Copy, Check, AlertCircle } from 'lucide-react'
 
 export const OrderConfirmationView: React.FC = () => {
   const { orderId } = useParams({ from: '/confirmacao/$orderId' })
@@ -25,65 +24,76 @@ export const OrderConfirmationView: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-20 space-y-8">
-        <Skeleton className="h-16 w-3/4 mx-auto" />
-        <Skeleton className="h-96 w-full rounded-2xl" />
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <Skeleton className="h-[600px] w-full max-w-xl rounded-3xl" />
       </div>
     )
   }
 
   if (isError || !order) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-20 text-center space-y-4">
+      <div className="min-h-[70vh] flex flex-col items-center justify-center p-8 text-center space-y-4">
         <AlertCircle className="w-16 h-16 text-red-400 mx-auto" />
-        <h2 className="text-2xl font-bold text-[#f7f4ed]">Pedido Não Encontrado</h2>
-        <p className="text-xs text-[#a69a8f]">Não conseguimos localizar os registros desta transação.</p>
+        <h2 className="text-2xl font-mono font-bold text-[#f7f4ed]">Pedido Não Encontrado</h2>
+        <p className="text-xs font-mono text-[#8a7b70]">Não conseguimos localizar os registros desta transação.</p>
         <Link to="/">
-          <Button variant="primary">Voltar ao Catálogo</Button>
+          <button className="bg-[#d28a4c] text-[#140d0a] font-bold px-6 py-2.5 rounded-xl text-xs uppercase cursor-pointer">
+            Voltar ao Catálogo
+          </button>
         </Link>
       </div>
     )
   }
 
+  const shortTxHash = order.transactionHash
+    ? `${order.transactionHash.slice(0, 6)}...${order.transactionHash.slice(-4)}`
+    : '0xA91F...E82C'
+
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
-      {/* Thank you celebration header */}
-      <div className="text-center space-y-3">
-        <div className="w-16 h-16 bg-emerald-950/40 border border-emerald-500/40 rounded-full flex items-center justify-center mx-auto text-emerald-400 mb-2">
-          <CheckCircle2 className="w-10 h-10" />
-        </div>
-        <span className="text-xs font-bold text-[#d28a4c] tracking-widest uppercase">THANK YOU</span>
-        <h1 className="text-3xl sm:text-4xl font-black text-[#f7f4ed] tracking-tight">
-          Seus NFTs agora estão na sua carteira
-        </h1>
-        <p className="text-xs text-[#a69a8f] max-w-md mx-auto">
-          A transação foi confirmada com sucesso na rede e o smart contract transferiu a titularidade definitiva para sua conta.
-        </p>
-      </div>
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-[#140d0a]/90 backdrop-blur-md">
+      {/* Modal Dialog Card matching Figma Desktop/Confirmação de Pedido */}
+      <div className="relative w-full max-w-xl bg-[#1c1410] border border-[#2d1e17] rounded-3xl p-8 sm:p-10 shadow-2xl space-y-6 font-mono text-xs border-b-4 border-b-[#d28a4c]">
+        {/* Close Button top-right */}
+        <Link
+          to="/"
+          className="absolute top-6 right-6 text-[#8a7b70] hover:text-[#f7f4ed] transition-colors p-1"
+          aria-label="Fechar confirmação"
+        >
+          <X className="w-5 h-5" />
+        </Link>
 
-      {/* Receipt Box (Snapshot) */}
-      <div className="bg-[#1b120e] border border-[#3d2b21] rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-xs text-[#a69a8f]">
-        {/* Meta Bar */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pb-6 border-b border-[#2d1e17]">
-          <div>
-            <span className="text-[10px] text-[#786b62] block uppercase tracking-wider">ID da Transação</span>
-            <div className="flex items-center gap-1.5 mt-0.5">
-              <span className="font-mono font-semibold text-[#f7f4ed] truncate max-w-[120px]">
-                {order.transactionHash}
-              </span>
-              <button
-                onClick={handleCopyTx}
-                aria-label="Copiar hash da transação"
-                className="text-[#d28a4c] hover:text-white"
-              >
-                {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-              </button>
-            </div>
+        {/* Envelope Thank You Icon */}
+        <div className="flex flex-col items-center text-center space-y-3 pt-2">
+          <div className="w-16 h-16 flex items-center justify-center">
+            <img
+              src="/assets/thank_you_envelope.png"
+              alt="THANK YOU"
+              className="w-14 h-auto object-contain"
+            />
           </div>
+          <span className="text-xs font-black text-[#d28a4c] tracking-widest uppercase">
+            THANK YOU
+          </span>
+          <h1 className="text-base sm:text-lg font-black text-[#f7f4ed] tracking-wide">
+            Seus NFTs agora estão na sua carteira
+          </h1>
+        </div>
 
+        {/* 4-Column Bar */}
+        <div className="grid grid-cols-4 gap-2 py-4 border-y border-[#2d1e17] text-center">
           <div>
-            <span className="text-[10px] text-[#786b62] block uppercase tracking-wider">Data</span>
-            <span className="font-semibold text-[#f7f4ed] block mt-0.5">
+            <span className="text-[10px] text-[#8a7b70] block mb-1">ID da transação</span>
+            <button
+              onClick={handleCopyTx}
+              className="text-[#f7f4ed] font-bold hover:text-[#d28a4c] transition-colors inline-flex items-center gap-1"
+            >
+              <span>{shortTxHash}</span>
+              {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3 text-[#8a7b70]" />}
+            </button>
+          </div>
+          <div>
+            <span className="text-[10px] text-[#8a7b70] block mb-1">Data</span>
+            <span className="text-[#f7f4ed] font-bold">
               {new Date(order.createdAt).toLocaleDateString('pt-BR', {
                 day: '2-digit',
                 month: 'short',
@@ -91,101 +101,84 @@ export const OrderConfirmationView: React.FC = () => {
               })}
             </span>
           </div>
-
           <div>
-            <span className="text-[10px] text-[#786b62] block uppercase tracking-wider">Carteira</span>
-            <span className="font-semibold text-[#f7f4ed] block mt-0.5">
-              {order.walletType} ({order.network.toUpperCase()})
-            </span>
+            <span className="text-[10px] text-[#8a7b70] block mb-1">Total</span>
+            <span className="text-[#d28a4c] font-black">{order.total} ETH</span>
           </div>
-
           <div>
-            <span className="text-[10px] text-[#786b62] block uppercase tracking-wider">Status</span>
-            <span className="font-bold text-emerald-400 block mt-0.5 uppercase">
-              {order.status === 'confirmed' ? 'Confirmado' : order.status}
-            </span>
+            <span className="text-[10px] text-[#8a7b70] block mb-1">Carteira</span>
+            <span className="text-[#f7f4ed] font-bold">{order.walletType}</span>
           </div>
         </div>
 
-        {/* Purchased Items List */}
-        <div className="space-y-4">
-          <h3 className="font-bold text-[#f7f4ed] text-xs uppercase tracking-wider">
-            Itens Adquiridos ({order.items.length})
+        {/* Detalhes da transação */}
+        <div className="space-y-3">
+          <h3 className="font-bold text-[#f7f4ed] text-xs">
+            Detalhes da transação
           </h3>
 
-          <div className="space-y-3">
+          {/* Table Header */}
+          <div className="flex justify-between text-[#8a7b70] text-[11px] pb-1 border-b border-[#241712]">
+            <span>NFTs</span>
+            <span>Edições</span>
+            <span>Subtotal</span>
+          </div>
+
+          {/* Items List */}
+          <div className="space-y-3 max-h-48 overflow-y-auto pr-1">
             {order.items.map((item) => (
-              <div
-                key={item.nftId}
-                className="flex items-center justify-between p-3 bg-[#241914] border border-[#2d1e17] rounded-xl"
-              >
+              <div key={item.nftId} className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <img
-                    src={item.imageUrl}
-                    alt={item.title}
-                    className="w-12 h-12 rounded-lg object-cover bg-[#140d0a]"
-                  />
+                  <div className="w-12 h-12 rounded-xl overflow-hidden bg-[#ded7cb] shrink-0 border border-[#2d1e17]">
+                    <img
+                      src={item.imageUrl}
+                      alt={item.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                   <div>
                     <h4 className="font-bold text-[#f7f4ed] text-xs">{item.title}</h4>
-                    <p className="text-[11px] text-[#786b62]">
-                      Token {item.tokenId} • Edição: {item.edition} • Qtd: {item.quantity}
-                    </p>
+                    <p className="text-[10px] text-[#8a7b70]">ID do token: {item.tokenId}</p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <span className="font-bold text-[#d28a4c] text-xs">{item.subtotal} ETH</span>
-                  <span className="text-[10px] text-[#786b62] block">({item.unitPrice} ETH unid.)</span>
+                <div className="text-center text-[#8a7b70]">
+                  (x {item.quantity})
+                </div>
+                <div className="text-right text-[#d28a4c] font-bold">
+                  {item.subtotal} ETH
                 </div>
               </div>
             ))}
           </div>
-        </div>
 
-        {/* Financial Breakdown */}
-        <div className="pt-4 border-t border-[#2d1e17] space-y-2">
-          <div className="flex justify-between">
-            <span>Subtotal</span>
-            <span className="font-semibold text-[#f7f4ed]">{order.subtotal} ETH</span>
-          </div>
-          {parseFloat(order.discount) > 0 && (
-            <div className="flex justify-between text-emerald-400">
-              <span>Desconto de Lançamento</span>
-              <span>- {order.discount} ETH</span>
+          {/* Totals */}
+          <div className="pt-2 border-t border-[#241712] space-y-1.5 text-[#8a7b70]">
+            <div className="flex justify-between">
+              <span>Taxa de rede</span>
+              <span className="text-[#f7f4ed]">{order.networkFee} ETH</span>
             </div>
-          )}
-          <div className="flex justify-between">
-            <span>Taxa de Rede</span>
-            <span className="font-semibold text-[#f7f4ed]">{order.networkFee} ETH</span>
-          </div>
-          <div className="flex justify-between text-base font-black text-[#f7f4ed] pt-3 border-t border-[#2d1e17]">
-            <span>Valor Total Pago</span>
-            <span className="text-[#d28a4c]">{order.total} ETH</span>
+            <div className="flex justify-between font-bold text-sm text-[#f7f4ed] pt-1">
+              <span>Total</span>
+              <span className="text-[#d28a4c]">{order.total} ETH</span>
+            </div>
           </div>
         </div>
 
-        {/* Etherscan Verification Message */}
-        <div className="p-4 bg-[#140d0a] border border-[#2d1e17] rounded-xl flex items-center justify-between">
-          <p className="text-xs text-[#a69a8f] pr-4">
-            Transação confirmada na {order.network.toUpperCase()}. A propriedade foi transferida para sua carteira conectada e registrada na rede.
+        {/* Transaction confirmation info */}
+        <div className="pt-2 border-t border-[#2d1e17] text-center space-y-4">
+          <p className="text-[11px] text-[#8a7b70] leading-relaxed">
+            Transação confirmada na {order.network === 'ethereum' ? 'Ethereum' : order.network}. A propriedade foi transferida para sua carteira conectada e registrada na rede.
           </p>
+
           <a
             href={`https://etherscan.io/tx/${order.transactionHash}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs text-[#d28a4c] font-semibold hover:underline shrink-0"
+            className="inline-block bg-[#d28a4c] hover:bg-[#e0985a] text-[#140d0a] font-bold px-8 py-3 rounded-xl text-xs uppercase tracking-wider transition-colors"
           >
-            Ver no Etherscan <ExternalLink className="w-3.5 h-3.5" />
+            Ver no Etherscan
           </a>
         </div>
-      </div>
-
-      {/* Bottom CTA */}
-      <div className="flex justify-center pt-4">
-        <Link to="/">
-          <Button size="lg" variant="primary">
-            Voltar ao Catálogo de Obras <ArrowRight className="w-4 h-4 ml-2" />
-          </Button>
-        </Link>
       </div>
     </div>
   )

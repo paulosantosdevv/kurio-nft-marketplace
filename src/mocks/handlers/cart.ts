@@ -2,21 +2,16 @@ import { http, HttpResponse, delay } from 'msw'
 import { mockStore } from '../db/mockStore'
 import { scenarioManager } from '../scenarios'
 import { CartItem, QuoteResponse } from '../../types/cart'
+import { getUserIdFromRequest } from './authHelper'
 
 function getSessionCartKey(request: Request): string {
-  const auth = request.headers.get('Authorization')
-  if (auth && auth.startsWith('Bearer ')) {
-    const token = auth.replace('Bearer ', '')
-    const userId = token.split('_')[1]
-    if (userId) return userId
-  }
-  return 'guest'
+  return getUserIdFromRequest(request) || 'guest'
 }
 
 export const cartHandlers = [
   // Get Cart
   http.get('/api/cart', async ({ request }) => {
-    await delay(150)
+    await delay(scenarioManager.getDelay() || 10)
     const key = getSessionCartKey(request)
     const items = mockStore.getCart(key)
     return HttpResponse.json(items)
@@ -24,7 +19,7 @@ export const cartHandlers = [
 
   // Add Item to Cart
   http.post('/api/cart', async ({ request }) => {
-    await delay(150)
+    await delay(scenarioManager.getDelay() || 10)
     const key = getSessionCartKey(request)
     const body = (await request.json()) as any
     const { nftId, quantity = 1, edition } = body
@@ -114,7 +109,7 @@ export const cartHandlers = [
 
   // Quote / Checkout revalidation
   http.post('/api/checkout/quote', async ({ request }) => {
-    await delay(200)
+    await delay(scenarioManager.getDelay() || 10)
     const body = (await request.json()) as any
     const { items, couponCode, network = 'ethereum' } = body
 

@@ -59,15 +59,15 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // Real-time Socket.IO synchronization for Cart items
   useEffect(() => {
     const handleNFTUpdated = (event: NFTUpdatedEvent) => {
-      const currentCart = queryClient.getQueryData<CartItem[]>(['cart']) || []
+      const cartFromQuery = queryClient.getQueryData<CartItem[]>(['cart'])
+      const currentCart = (cartFromQuery && cartFromQuery.length > 0) ? cartFromQuery : items
       const affectedItem = currentCart.find((item) => item.nftId === event.nftId)
 
       if (affectedItem) {
         // Price changed
         if (affectedItem.unitPrice !== event.newPrice) {
-          setPriceAlert(
-            `Atenção: O valor de "${affectedItem.nft.title}" mudou de ${affectedItem.unitPrice} ETH para ${event.newPrice} ETH em tempo real.`
-          )
+          const msg = `Atenção: O valor de "${affectedItem.nft.title}" mudou de ${affectedItem.unitPrice} ETH para ${event.newPrice} ETH em tempo real.`
+          setPriceAlert(msg)
         }
         // Editions changed
         if (affectedItem.quantity > event.availableEditions) {
@@ -85,7 +85,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return () => {
       socketService.off('nft.updated', handleNFTUpdated)
     }
-  }, [queryClient])
+  }, [queryClient, items])
 
   const addToCart = async (nftId: string, quantity = 1, edition?: string) => {
     await addMutation.mutateAsync({ nftId, quantity, edition })

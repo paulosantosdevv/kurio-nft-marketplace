@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useCart } from '../../context/CartContext'
 import { Button } from '../ui/Button'
-import { Input } from '../ui/Input'
 import { X, Trash2, Plus, Minus, AlertTriangle, Tag } from 'lucide-react'
 import { useNavigate } from '@tanstack/react-router'
 import { cartApi } from '../../api/client'
@@ -73,19 +72,19 @@ export const CartDrawer: React.FC = () => {
   const total = quote ? quote.total : (parseFloat(subtotal) + parseFloat(networkFee)).toFixed(4)
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex justify-end bg-black/70 backdrop-blur-sm animate-in fade-in duration-200"
-      onClick={() => setIsOpen(false)}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="cart-title"
-    >
+    <>
       <div
-        className="w-full max-w-md bg-[#1b120e] border-l border-[#3d2b21] h-full flex flex-col p-6 shadow-2xl text-[#f7f4ed] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
+        className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200"
+        onClick={() => setIsOpen(false)}
+      />
+      <div
+        role="dialog"
+        aria-label="Carrinho de NFTs"
+        aria-labelledby="cart-title"
+        className="fixed inset-y-0 left-0 right-0 sm:left-auto sm:w-[420px] max-w-full z-50 bg-[#1b120e] border-l border-[#3d2b21] h-full flex flex-col p-4 sm:p-6 shadow-2xl text-[#f7f4ed] overflow-y-auto overflow-x-hidden animate-in slide-in-from-right duration-200"
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#3d2b21] pb-4 mb-4">
+        <div className="flex items-center justify-between border-b border-[#3d2b21] pb-3 mb-3 shrink-0">
           <h2 id="cart-title" className="text-xl font-bold tracking-tight">
             Carrinho de NFTs
           </h2>
@@ -100,7 +99,7 @@ export const CartDrawer: React.FC = () => {
 
         {/* Real-time Socket Notification */}
         {priceAlert && (
-          <div className="mb-4 p-3 bg-amber-950/40 border border-amber-600/40 rounded-xl flex items-start gap-2.5 text-xs text-amber-200">
+          <div className="mb-3 p-3 bg-amber-950/40 border border-amber-600/40 rounded-xl flex items-start gap-2.5 text-xs text-amber-200 shrink-0">
             <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
             <div className="flex-1">{priceAlert}</div>
             <button
@@ -114,7 +113,7 @@ export const CartDrawer: React.FC = () => {
         )}
 
         {/* Items List */}
-        <div className="flex-1 overflow-y-auto space-y-4 pr-1">
+        <div className="space-y-3 py-1">
           {items.length === 0 ? (
             <div className="h-64 flex flex-col items-center justify-center text-center p-6 text-[#786b62]">
               <p className="text-base font-medium text-[#a69a8f] mb-1">Seu carrinho está vazio</p>
@@ -171,7 +170,7 @@ export const CartDrawer: React.FC = () => {
 
         {/* Coupon & Summary Footer */}
         {items.length > 0 && (
-          <div className="border-t border-[#3d2b21] pt-4 mt-4 space-y-4">
+          <div className="shrink-0 border-t border-[#3d2b21] pt-4 mt-4 space-y-4">
             {/* Coupon input */}
             <div>
               {appliedCoupon ? (
@@ -187,23 +186,28 @@ export const CartDrawer: React.FC = () => {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleApplyCoupon} className="flex gap-2">
-                  <Input
-                    placeholder="Código promocional (ex: KURIO10)"
-                    value={couponCode}
-                    onChange={(e) => setCouponCode(e.target.value)}
-                    error={couponError || undefined}
-                    className="text-xs py-2"
-                  />
-                  <Button
-                    type="submit"
-                    variant="secondary"
-                    size="sm"
-                    isLoading={isApplyingCoupon}
-                    className="shrink-0 text-xs px-3"
-                  >
-                    Aplicar
-                  </Button>
+                <form onSubmit={handleApplyCoupon} className="space-y-1">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Código promocional (ex: KURIO10)"
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value)}
+                      className={`flex-1 min-w-0 bg-[#1b120e] text-[#f7f4ed] border rounded-lg px-3.5 py-2 text-xs placeholder:text-[#786b62] focus:border-[#d28a4c] focus:outline-none focus:ring-1 focus:ring-[#d28a4c] transition-colors ${
+                        couponError ? 'border-red-500' : 'border-[#3d2b21]'
+                      }`}
+                    />
+                    <button
+                      type="submit"
+                      disabled={isApplyingCoupon}
+                      className="shrink-0 bg-[#241914] hover:bg-[#2e201a] text-[#f7f4ed] border border-[#3d2b21] hover:border-[#d28a4c] text-xs font-medium px-4 py-2 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
+                    >
+                      {isApplyingCoupon ? 'Aplicando...' : 'Aplicar'}
+                    </button>
+                  </div>
+                  {couponError && (
+                    <span className="text-xs text-red-400 block pt-1">{couponError}</span>
+                  )}
                 </form>
               )}
             </div>
@@ -234,9 +238,22 @@ export const CartDrawer: React.FC = () => {
             <Button onClick={handleProceedToCheckout} className="w-full" size="md">
               Avançar para Pagamento
             </Button>
+
+            <div className="text-center pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsOpen(false)
+                  navigate({ to: '/carrinho' })
+                }}
+                className="text-xs font-mono text-[#8a7b70] hover:text-[#f7f4ed] transition-colors cursor-pointer"
+              >
+                Ver carrinho completo
+              </button>
+            </div>
           </div>
         )}
       </div>
-    </div>
+    </>
   )
 }

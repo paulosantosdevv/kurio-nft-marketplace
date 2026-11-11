@@ -2,15 +2,7 @@ import { http, HttpResponse, delay } from 'msw'
 import { mockStore } from '../db/mockStore'
 import { scenarioManager } from '../scenarios'
 import { NFTItem } from '../../types/nft'
-
-function getUserIdFromRequest(request: Request): string | null {
-  const auth = request.headers.get('Authorization')
-  if (auth && auth.startsWith('Bearer ')) {
-    const token = auth.replace('Bearer ', '')
-    return token.split('_')[1] || null
-  }
-  return null
-}
+import { getUserIdFromRequest } from './authHelper'
 
 export const nftHandlers = [
   // List NFTs with search, filters, sorting, pagination

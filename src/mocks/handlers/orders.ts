@@ -2,6 +2,7 @@ import { http, HttpResponse, delay } from 'msw'
 import { mockStore } from '../db/mockStore'
 import { scenarioManager } from '../scenarios'
 import { Order, OrderItemSnapshot, OrderStatus } from '../../types/order'
+import { getUserIdFromRequest } from './authHelper'
 
 export const orderHandlers = [
   // Create Order (Idempotent)
@@ -118,13 +119,9 @@ export const orderHandlers = [
         }
       }
 
-      const auth = request.headers.get('Authorization')
-      if (auth && auth.startsWith('Bearer ')) {
-        const token = auth.replace('Bearer ', '')
-        const userId = token.split('_')[1]
-        if (userId) {
-          mockStore.setCart(userId, [])
-        }
+      const userId = getUserIdFromRequest(request)
+      if (userId) {
+        mockStore.setCart(userId, [])
       }
     }
 
