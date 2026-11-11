@@ -34,7 +34,7 @@ export const MintDiary: React.FC = () => {
 
   return (
     <section className="py-14 font-mono">
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10 space-y-2">
           <h2 className="text-xl sm:text-2xl font-bold text-[#f7f4ed]">
             Diário da Cunhagem
@@ -48,9 +48,9 @@ export const MintDiary: React.FC = () => {
           {articles.map((art) => (
             <article
               key={art.id}
-              className="bg-[#1c1410] border border-[#2d1e17] rounded-2xl p-4 flex flex-col group hover:border-[#d28a4c] transition-colors shadow-lg"
+              className="bg-[#241612] border border-[#3d271f] rounded-2xl p-4 flex flex-col group hover:border-[#d28a4c] transition-colors shadow-lg"
             >
-              <div className="aspect-[4/3] rounded-xl overflow-hidden bg-[#ded7cb] border border-[#2d1e17] mb-4">
+              <div className="aspect-[4/3] rounded-xl overflow-hidden bg-[#ded7cb] border border-[#3d271f] mb-4">
                 <img
                   src={art.image}
                   alt={art.title}

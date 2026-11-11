@@ -91,7 +91,7 @@ export const HeroBanner: React.FC = () => {
 
             {/* Right Column: Hero Character Artwork (Figma Desktop/Início) */}
             <div className="col-span-5 flex justify-end">
-              <div className="relative w-full max-w-[460px] aspect-square rounded-[32px] overflow-hidden shadow-2xl border border-[#2d1e17] bg-[#ded7cb]">
+              <div className="relative w-full max-w-[460px] aspect-square rounded-[32px] overflow-hidden shadow-2xl border border-[#3d271f] bg-[#ded7cb]">
                 <img
                   src="/assets/nfts/hero_character.png"
                   alt="Emerald Ape NFT em destaque — Kurio"

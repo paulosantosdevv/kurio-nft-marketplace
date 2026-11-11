@@ -56,7 +56,7 @@ export const NFTFilters: React.FC<NFTFiltersProps> = ({
   return (
     <div className="space-y-6">
       {/* Box 1: Filters Box */}
-      <div className="bg-[#18120e] border border-[#2d1c15] rounded-2xl p-5 text-xs text-[#8a7b70]">
+      <div className="bg-[#241612] border border-[#3d271f] rounded-2xl p-5 text-xs text-[#8a7b70]">
         {/* Coleções */}
         <div>
           <h4 className="text-xs font-bold text-[#f5efe6] uppercase tracking-wider mb-3.5">
@@ -142,7 +142,7 @@ export const NFTFilters: React.FC<NFTFiltersProps> = ({
       </div>
 
       {/* Box 2: NFT em Destaque — Oferta Limitada */}
-      <div className="bg-[#18120e] border border-[#2d1c15] rounded-2xl p-4 text-xs">
+      <div className="bg-[#241612] border border-[#3d271f] rounded-2xl p-4 text-xs">
         <h4 className="text-xs font-bold text-[#d28a4c] tracking-wider uppercase">
           NFT EM DESTAQUE
         </h4>
@@ -153,7 +153,7 @@ export const NFTFilters: React.FC<NFTFiltersProps> = ({
         <Link
           to="/nft/$id"
           params={{ id: 'nft-2' }}
-          className="block rounded-xl overflow-hidden aspect-square bg-[#ded7cb] border border-[#2d1c15] hover:opacity-95 transition-opacity"
+          className="block rounded-xl overflow-hidden aspect-square bg-[#ded7cb] border border-[#3d271f] hover:opacity-95 transition-opacity"
         >
           <img
             src="/assets/nfts/sidebar_nft.png"

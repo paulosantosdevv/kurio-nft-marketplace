@@ -15,7 +15,7 @@ export const NFTCard: React.FC<NFTCardProps> = ({ nft }) => {
       <Link
         to="/nft/$id"
         params={{ id: nft.id }}
-        className="block relative aspect-square rounded-[24px] overflow-hidden bg-[#ded7cb] transition-transform duration-300 group-hover:scale-[1.02] shadow-lg border border-[#2d1e17]"
+        className="block relative aspect-square rounded-[24px] overflow-hidden bg-[#ded7cb] transition-transform duration-300 group-hover:scale-[1.02] shadow-lg border border-[#3d271f]"
       >
         <img
           src={nft.imageUrl}
