@@ -17,6 +17,7 @@ A aplicação conta com arquitetura modular, estado de navegação com sincroniz
 - [Destaques Técnicos](#-destaques-técnicos)
 - [Quick Start](#-quick-start)
 - [Credenciais e Dados de Teste](#-credenciais-e-dados-de-teste)
+- [Contratos REST & Tratamento de Erros](#-contratos-rest--tratamento-de-erros)
 - [Simulação de Cenários de Rede e Falhas (MSW)](#-simulação-de-cenários-de-rede-e-falhas-msw)
 - [Testes Automatizados (Playwright E2E)](#-testes-automatizados-playwright-e2e)
 - [Performance e Auditoria Lighthouse](#-performance-e-auditoria-lighthouse)
@@ -93,6 +94,54 @@ Para navegar e validar todos os fluxos autenticados, utilize as contas pré-conf
 * `KURIO10`: Aplica **10% de desconto** no subtotal da compra (Ativo).
 * `LAUNCH20`: Aplica **20% de desconto** no subtotal da compra (Ativo).
 * `EXPIRED50`: Simula cupom expirado/inválido com retorno de erro amigável.
+
+---
+
+## 📑 Contratos REST & Tratamento de Erros
+
+Em conformidade com a seção **5. Contratos REST** do desafio, todos os endpoints foram projetados sob uma arquitetura orientada a contratos tipados com TypeScript e interceptados no nível de transporte pelo Mock Service Worker (MSW).
+
+### Recursos e Operações Mínimas
+
+| Recurso | Método / Endpoint | Operações e Descrição |
+| :--- | :--- | :--- |
+| **Sessão e conta** | `POST /api/auth/register`<br>`POST /api/auth/login`<br>`GET /api/auth/session`<br>`POST /api/auth/logout` | **Cadastro**: Criação de usuário com validação de unicidade de e-mail e hash seguro.<br>**Login**: Autenticação com emissão de token Bearer.<br>**Consulta da sessão**: Validação do token persistido e perfil ativo.<br>**Logout**: Revogação de sessão e limpeza determinística de cache.<br>**Expiração**: Interceptor global que detecta status 401 e dispara o evento `kurio:auth:unauthorized` para redirecionamento inteligente preservando a rota de retorno (`?redirect=...`). |
+| **NFTs** | `GET /api/nfts`<br>`GET /api/nfts/:id` | **Listagem**: Suporte a busca textual (`search`), filtros por categoria (`category`), rede blockchain (`network`), intervalo de preço (`priceMin`, `priceMax`), ordenação (`sortBy`) e paginação (`page`, `limit`).<br>**Detalhe**: Metadados completos por identificador (`id`), atributos, procedência no IPFS e informações da coleção. |
+| **Favoritos** | `GET /api/favorites`<br>`POST /api/favorites/:id` | **Consulta**: Retorna a lista de IDs favoritados pelo colecionador autenticado.<br>**Inclusão e Remoção**: Toggle atômico com atualização otimista na interface e rollback automático em caso de falha de rede. |
+| **Carrinho** | `GET /api/cart`<br>`POST /api/cart`<br>`PATCH /api/cart/:id`<br>`DELETE /api/cart/:id` | **Consulta**: Retorna os itens selecionados (com suporte transparente para visitante e usuário autenticado).<br>**Inclusão**: Adiciona NFT com controle de quantidade e edição.<br>**Alteração**: Atualização da quantidade de itens.<br>**Remoção**: Exclusão de item com recálculo imediato do resumo financeiro. |
+| **Cotação** | `POST /api/checkout/quote` | **Validação de cupom**: Aplicação e validação de cupons promocionais.<br>**Disponibilidade**: Checagem em tempo real de estoque e edições disponíveis.<br>**Descontos, taxas e total**: Cálculo dinâmico do subtotal, desconto percentual, taxa estimada da rede blockchain selecionada e total consolidado em ETH. |
+| **Pedidos** | `POST /api/orders`<br>`GET /api/orders/:id` | **Criação idempotente**: Criação da ordem exigindo obrigatoriamente o cabeçalho `Idempotency-Key`.<br>**Consulta do estado e recibo**: Retorno do recibo consolidado com hash de transação na blockchain (`0x...`), status do pedido e snapshot imutável dos itens comprados no instante da transação. |
+| **Perfil** | `GET /api/profile`<br>`PATCH /api/profile`<br>`POST /api/profile/password` | **Consulta**: Recuperação dos dados do colecionador logado.<br>**Atualização**: Modificação de dados cadastrais (nome, biografia, avatar).<br>**Alteração de senha**: Validação da senha atual com confirmação e persistência segura. |
+| **Carteiras** | `GET /api/wallets`<br>`POST /api/wallets`<br>`PATCH /api/wallets/:id`<br>`DELETE /api/wallets/:id` | **Consulta**: Listagem das carteiras vinculadas à conta.<br>**Cadastro**: Vinculação de nova carteira (MetaMask, Coinbase, WalletConnect) com validação de formato de endereço.<br>**Atualização**: Alternância de carteira primária/secundária e edição de apelido.<br>**Remoção**: Desconexão de carteira. |
+
+---
+
+### Representação Padronizada de Erros
+
+A API adota respostas JSON padronizadas com status codes HTTP semânticos para cada categoria de contingência:
+
+* **Erros de Validação (`400 Bad Request`)**: Retornado quando dados obrigatórios estão ausentes, formato de e-mail é inválido ou valores numéricos são inconsistentes.
+* **Sessão Inválida / Expirada (`401 Unauthorized`)**: Retornado quando o cabeçalho `Authorization: Bearer <token>` está ausente, forjado ou quando a sessão foi revogada (cenário `session_expired`).
+* **Falta de Permissão (`403 Forbidden`)**: Disparado ao tentar acessar ou manipular recursos restritos a outro usuário autenticado.
+* **Recurso Inexistente (`404 Not Found`)**: Retornado para NFTs, rotas ou ordens não encontradas no catálogo (ex: `/api/nfts/nft-999`).
+* **Conflito de Disponibilidade (`409 Conflict`)**: Disparado em tentativas de cadastro com e-mail duplicado, tentativa de compra de edição já esgotada (`stock_out`) ou divergência no uso da chave de idempotência.
+* **Falha Transitória (`500 Internal Server Error` / `503 Service Unavailable`)**: Simula falhas temporárias de backend (cenário `server_error`), permitindo que a camada do TanStack Query aplique retentativas automáticas e feedback visual de nova tentativa (*retry*).
+
+---
+
+### Garantia de Idempotência em Pedidos (`Idempotency-Key`)
+
+Todas as mutations que geram ordens (`POST /api/orders`) exigem o envio de um identificador exclusivo no cabeçalho HTTP `Idempotency-Key`:
+
+1. **Mesma tentativa (Recuperação de Pedido)**:  
+   Se uma requisição for repetida (por duplo clique do usuário, reconexão de rede ou timeout de resposta) contendo a **mesma `Idempotency-Key` e o mesmo payload**, o MSW recupera a ordem previamente gerada e retorna status **HTTP 200**, prevenindo ordens duplicadas e cobranças duplas na blockchain.
+2. **Reutilização com conteúdo divergente (Conflito)**:  
+   Se uma requisição tentar reaproveitar uma `Idempotency-Key` existente com dados de pedido divergentes (outro endereço de carteira, rede ou itens distintos), a API rejeita a operação retornando status **HTTP 409 Conflict**:
+   ```json
+   {
+     "message": "Chave de idempotência já utilizada para uma transação com dados divergentes."
+   }
+   ```
 
 ---
 
